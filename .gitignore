@@ -1,0 +1,51 @@
+# Gradle
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local configuration
+local.properties
+*.keystore
+*.jks
+keystore.properties
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test reports
+*/build/reports/
+*/build/test-results/
+
+# Generated
+app/src/main/java/it/bollofacile/di/Hilt_*.java
+app/src/main/java/it/bollofacile/data/db/AppDatabase_*.java
+
+# APK
+*.apk
+*.aab
+
+# Coverage
+*.ec
+coverage/
+
+# ProGuard
+*.pro
+
+# Logs
+*.log
+
+# Backup
+*.bak
+*.tmp
+*.temp

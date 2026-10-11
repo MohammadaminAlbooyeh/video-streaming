@@ -1,0 +1,135 @@
+<resources>
+    <string name="app_name">BolloFacile</string>
+    
+    <!-- AdMob (sostituire con i tuoi ID) -->
+    <string name="admob_app_id">ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX</string>
+    <string name="admob_banner_id">ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX</string>
+    <string name="admob_interstitial_id">ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX</string>
+    
+    <!-- Home -->
+    <string name="home_title">I tuoi veicoli</string>
+    <string name="add_vehicle">Aggiungi veicolo</string>
+    <string name="no_vehicles">Nessun veicolo aggiunto</string>
+    <string name="add_first_vehicle">Tocca + per aggiungere il tuo primo veicolo</string>
+    <string name="quick_actions">Azioni rapide</string>
+    <string name="calc_bollo">Calcola Bollo</string>
+    <string name="revisione">Revisione</string>
+    <string name="sanzioni">Sanzioni</string>
+    <string name="upcoming_deadlines">Prossime scadenze</string>
+    <string name="expired">SCADUTO</string>
+    <string name="urgent">URGENTE</string>
+    <string name="days_left">giorni</string>
+    <string name="days_ago">giorni fa</string>
+    
+    <!-- Veicolo Form -->
+    <string name="new_vehicle">Nuovo veicolo</string>
+    <string name="edit_vehicle">Modifica veicolo</string>
+    <string name="brand">Marca</string>
+    <string name="model">Modello</string>
+    <string name="plate">Targa (opzionale)</string>
+    <string name="kw">kW</string>
+    <string name="cv">CV</string>
+    <string name="euro_class">Classe Euro</string>
+    <string name="fuel_type">Alimentazione</string>
+    <string name="registration_date">Data immatricolazione</string>
+    <string name="region">Regione</string>
+    <string name="historic_vehicle">Veicolo storico (30+ anni)</string>
+    <string name="notes">Note</string>
+    <string name="save">Salva</string>
+    <string name="cancel">Annulla</string>
+    <string name="show_preview">Mostra anteprima</string>
+    <string name="hide_preview">Nascondi anteprima</string>
+    
+    <!-- Veicolo Detail -->
+    <string name="vehicle_details">Dettagli veicolo</string>
+    <string name="bollo_details">Dettaglio bollo</string>
+    <string name="revisione_details">Dettaglio revisione</string>
+    <string name="technical_details">Dati tecnici</string>
+    <string name="base_bollo">Bollo base</string>
+    <string name="superbollo">Superbollo</string>
+    <string name="fuel_reduction">Riduzione alimentazione</string>
+    <string name="euro_regional_reduction">Riduzioni Euro/Regionali</string>
+    <string name="total">Totale</string>
+    <string name="next_revision">Prossima scadenza</string>
+    <string name="in_years">anni</string>
+    <string name="exempt">Esente</string>
+    
+    <!-- Bollo Calc -->
+    <string name="quick_calc">Calcolo rapido</string>
+    <string name="calculate">Calcola</string>
+    <string name="result">Risultato</string>
+    <string name="due_date">Scadenza</string>
+    <string name="preview_calc">Anteprima calcolo</string>
+    
+    <!-- Revisione -->
+    <string name="revisione_title">Calcolo revisione</string>
+    <string name="last_revision">Ultima revisione (opzionale)</string>
+    <string name="next_revision_date">Prossima revisione</string>
+    
+    <!-- Sanzioni -->
+    <string name="sanzioni_title">Calcolo sanzioni</string>
+    <string name="bollo_amount">Importo bollo (€)</string>
+    <string name="due_date_bollo">Data scadenza bollo</string>
+    <string name="payment_date">Data pagamento prevista</string>
+    <string name="delay_days">Giorni di ritardo</string>
+    <string name="base_penalty">Sanzione base (30%)</string>
+    <string name="legal_interest">Interessi legali</string>
+    <string name="ravvedimento">Ravvedimento operoso</string>
+    <string name="total_to_pay">Totale da pagare</string>
+    <string name="in_rule">In regola</string>
+    <string name="penalty_deadlines">Scadenze ravvedimento operoso</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="appearance">Aspetto</string>
+    <string name="theme">Tema</string>
+    <string name="theme_system">Sistema</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="theme_dark">Scuro</string>
+    <string name="default_region">Regione di default</string>
+    <string name="reminders">Promemoria</string>
+    <string name="reminder_notifications">Notifiche promemoria</string>
+    <string name="reminder_days">Giorni prima della scadenza</string>
+    <string name="pro_version">Versione Pro</string>
+    <string name="pro_active">Pro attivo</string>
+    <string name="unlock_pro">Sblocca versione Pro</string>
+    <string name="restore_purchases">Ripristina acquisti</string>
+    <string name="version">Versione</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="open_source_licenses">Licenze Open Source</string>
+    
+    <!-- Pro -->
+    <string name="pro_title">BolloFacile Pro</string>
+    <string name="pro_thanks">Grazie per il supporto!</string>
+    <string name="pro_features_slogan">Funzionalità Pro</string>
+    <string name="pro_feature_history">Storico pagamenti</string>
+    <string name="pro_feature_history_desc">Salva e visualizza tutti i pagamenti bollo e revisione</string>
+    <string name="pro_feature_export">Export/Import dati</string>
+    <string name="pro_feature_export_desc">Backup completo in JSON/CSV</string>
+    <string name="pro_feature_no_ads">Nessuna pubblicità</string>
+    <string name="pro_feature_no_ads_desc">Esperienza pulita senza banner o interstitial</string>
+    <string name="pro_feature_support">Supporto prioritario</string>
+    <string name="pro_feature_support_desc">Risposte rapide alle tue domande</string>
+    <string name="pro_feature_updates">Aggiornamenti a vita</string>
+    <string name="pro_feature_updates_desc">Tariffe sempre aggiornate ogni anno</string>
+    <string name="buy_pro">Acquista Pro - €4,99 (una tantum)</string>
+    <string name="why_pro">Perché Pro?</string>
+    <string name="why_pro_text">BolloFacile è sviluppato da un piccolo team indipendente. Il tuo acquisto ci aiuta a mantenere l\'app aggiornata con le nuove tariffe annuali, aggiungere nuove funzionalità e garantire un\'esperienza senza pubblicità. Grazie per il tuo supporto!</string>
+    
+    <!-- Errors -->
+    <string name="error_required">Campo obbligatorio</string>
+    <string name="error_invalid_number">Numero non valido</string>
+    <string name="error_invalid_date">Data non valida</string>
+    <string name="error_vehicle_not_found">Veicolo non trovato</string>
+    
+    <!-- Notifications -->
+    <string name="notification_bollo_title">Bollo in scadenza</string>
+    <string name="notification_bollo_text">Il bollo per il tuo veicolo sta per scadere</string>
+    <string name="notification_revisione_title">Revisione in scadenza</string>
+    <string name="notification_revisione_text">La revisione per il tuo veicolo sta per scadere</string>
+    
+    <!-- Dialogs -->
+    <string name="delete_confirm">Eliminare questo veicolo?</string>
+    <string name="delete_confirm_text">L\'azione non può essere annullata.</string>
+    <string name="delete">Elimina</string>
+</resources>

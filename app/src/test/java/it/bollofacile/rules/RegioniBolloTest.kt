@@ -1,0 +1,120 @@
+package it.bollofacile.rules
+
+import it.bollofacile.rules.model.*
+import kotlinx.datetime.LocalDate
+import org.junit.Assert.*
+import org.junit.Test
+
+class RegioniBolloTest {
+
+    @Test
+    fun testLombardiaElectricExemption() {
+        val veicoloElettricoRecente = Veicolo(
+            marca = "Test", modello = "Test", kw = 100, cv = 136,
+            classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.ELETTRICA,
+            dataImmatricolazione = LocalDate(2023, 1, 1), regione = Regione.LOMBARDIA
+        )
+        val result = BolloRules2026.calcolaBollo(veicoloElettricoRecente)
+        
+        // Lombardia: esenzione 5 anni per elettriche
+        assertTrue("Electric 2023 in Lombardia should be exempt", result.isEsente)
+    }
+
+    @Test
+    fun testLombardiaElectricOldNotExempt() {
+        val veicoloElettricoVecchio = Veicolo(
+            marca = "Test", modello = "Test", kw = 100, cv = 136,
+            classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.ELETTRICA,
+            dataImmatricolazione = LocalDate(2015, 1, 1), regione = Regione.LOMBARDIA
+        )
+        val result = BolloRules2026.calcolaBollo(veicoloElettricoVecchio)
+        
+        // Più di 5 anni = non esente
+        assertFalse("Electric 2015 in Lombardia should not be exempt", result.isEsente)
+    }
+
+    @Test
+    fun testLombardiaHybridReduction() {
+        val veicoloIbrido = Veicolo(
+            marca = "Test", modello = "Test", kw = 100, cv = 136,
+            classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.IBRIDA,
+            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.LOMBARDIA
+        )
+        val result = BolloRules2026.calcolaBollo(veicoloIbrido)
+        
+        // Lombardia: 50% riduzione per ibride
+        val expectedReduction = result.bolloBase * 0.5
+        assertEquals("50% hybrid reduction in Lombardia", expectedReduction, result.riduzioneAlimentazione, 0.01)
+    }
+
+    @Test
+    fun testLazioOnlyElectricExemption() {
+        val veicoloIbrido = Veicolo(
+            marca = "Test", modello = "Test", kw = 100, cv = 136,
+            classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.IBRIDA,
+            dataImmatricolazione = LocalDate(2023, 1, 1), regione = Regione.LAZIO
+        )
+        val result = BolloRules2026.calcolaBollo(veicoloIbrido)
+        
+        // Lazio: nessuna riduzione per ibride
+        assertEquals("No hybrid reduction in Lazio", 0.0, result.riduzioneAlimentazione, 0.01)
+    }
+
+    @Test
+    fun testLazioElectricExemption3Years() {
+        val veicoloElettricoRecente = Veicolo(
+            marca = "Test", modello = "Test", kw = 100, cv = 136,
+            classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.ELETTRICA,
+            dataImmatricolazione = LocalDate(2023, 1, 1), regione = Regione.LAZIO
+        )
+        val result = BolloRules2026.calcolaBollo(veicoloElettricoRecente)
+        
+        // Lazio: esenzione 3 anni per elettriche
+        assertTrue("Electric 2023 in Lazio should be exempt", result.isEsente)
+    }
+
+    @Test
+    fun testDefaultRegionNoSpecialRules() {
+        // Region without special rules (e.g., ABRUZZO)
+        val veicoloIbrido = Veicolo(
+            marca = "Test", modello = "Test", kw = 100, cv = 136,
+            classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.IBRIDA,
+            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.ABRUZZO
+        )
+        val result = BolloRules2026.calcolaBollo(veicoloIbrido)
+        
+        // No special regional reduction for hybrid in Abruzzo
+        assertEquals("No special regional reduction for hybrid in default region", 0.0, result.riduzioneRegionale, 0.01)
+    }
+
+    @Test
+    fun testGplMethanoNationalReduction() {
+        val veicoloGpl = Veicolo(
+            marca = "Test", modello = "Test", kw = 100, cv = 136,
+            classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.GPL,
+            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.ABRUZZO
+        )
+        val result = BolloRules2026.calcolaBollo(veicoloGpl)
+        
+        // 75% riduzione nazionale per GPL
+        val expectedReduction = result.bolloBase * 0.75
+        assertEquals("75% national GPL reduction", expectedReduction, result.riduzioneAlimentazione, 0.01)
+    }
+
+    @Test
+    fun testCoefficienteRegionale() {
+        // Test che il coefficiente regionale venga applicato
+        val veicolo = Veicolo(
+            marca = "Test", modello = "Test", kw = 100, cv = 136,
+            classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.BENZINA,
+            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.LOMBARDIA
+        )
+        val resultLombardia = BolloRules2026.calcolaBollo(veicolo)
+        
+        val veicoloPiemonte = veicolo.copy(regione = Regione.PIEMONTE)
+        val resultPiemonte = BolloRules2026.calcolaBollo(veicoloPiemonte)
+        
+        // Stesso coefficiente (1.0) = stesso bollo base
+        assertEquals("Same coefficient should give same base", resultLombardia.bolloBase, resultPiemonte.bolloBase, 0.01)
+    }
+}
