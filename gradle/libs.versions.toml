@@ -1,114 +1,84 @@
-libs {
-    versions {
-        agp = "8.5.0"
-        kotlin = "2.0.0"
-        composeCompiler = "1.5.12"
-        composeBom = "2024.08.00"
-        hilt = "2.51.1"
-        room = "2.6.1"
-        lifecycle = "2.8.3"
-        navigation = "2.7.7"
-        coroutines = "1.8.0"
-        kotlinxDatetime = "0.5.0"
-        material3 = "1.2.1"
-        accompanist = "0.32.0"
-        workManager = "2.9.0"
-        playBilling = "7.0.0"
-        playServicesAds = "23.0.0"
-        ump = "3.0.0"
-        junit = "4.13.2"
-        junitJupiter = "5.10.2"
-        truth = "1.1.7"
-        espresso = "3.5.1"
-        composeUiTest = "1.6.0-alpha01"
-        robolectric = "4.11"
-        mockk = "1.13.14"
-        kotlinxCoroutinesTest = "1.8.0"
-        turbine = "1.0.0"
-        ksp = "2.0.0-1.0.13"
-    }
-    
-    libraries {
-        // Android Gradle Plugin
-        androidGradlePlugin = { module = "com.android.tools.build:gradle"; version.ref = "agp" }
-        kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin"; version.ref = "kotlin" }
-        composeCompilerPlugin = { module = "org.jetbrains.kotlin:kotlin-compose-compiler-plugin"; version.ref = "composeCompiler" }
-        kspPlugin = { module = "com.google.devtools.ksp:symbol-processing-api"; version.ref = "ksp" }
-        
-        // Compose BOM
-        composeBom = { module = "androidx.compose:compose-bom"; version.ref = "composeBom" }
-        
-        // Compose libraries (versions from BOM)
-        composeUi = { module = "androidx.compose.ui:ui" }
-        composeMaterial3 = { module = "androidx.compose.material3:material3" }
-        composeMaterialIcons = { module = "androidx.compose.material:material-icons-extended" }
-        composeActivity = { module = "androidx.activity:activity-compose" }
-        composeViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose" }
-        composeRuntime = { module = "androidx.compose.runtime:runtime" }
-        composeFoundation = { module = "androidx.compose.foundation:foundation" }
-        composeAnimation = { module = "androidx.compose.animation:animation" }
-        composeTooling = { module = "androidx.compose.ui:ui-tooling" }
-        composeToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
-        
-        // Accompanist
-        accompanistPermissions = { module = "com.google.accompanist:accompanist-permissions"; version.ref = "accompanist" }
-        accompanistInsets = { module = "com.google.accompanist:accompanist-insets"; version.ref = "accompanist" }
-        
-        // Hilt
-        hiltAndroid = { module = "com.google.dagger:hilt-android"; version.ref = "hilt" }
-        hiltCompiler = { module = "com.google.dagger:hilt-compiler"; version.ref = "hilt" }
-        hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose"; version.ref = "hilt" }
-        
-        // Room
-        roomRuntime = { module = "androidx.room:room-runtime"; version.ref = "room" }
-        roomCompiler = { module = "androidx.room:room-compiler"; version.ref = "room" }
-        roomKtx = { module = "androidx.room:room-ktx"; version.ref = "room" }
-        
-        // Lifecycle
-        lifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx"; version.ref = "lifecycle" }
-        lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx"; version.ref = "lifecycle" }
-        lifecycleViewModelSavedState = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate"; version.ref = "lifecycle" }
-        
-        // Navigation
-        navigationCompose = { module = "androidx.navigation:navigation-compose"; version.ref = "navigation" }
-        navigationFragment = { module = "androidx.navigation:navigation-fragment-ktx"; version.ref = "navigation" }
-        
-        // Coroutines
-        coroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android"; version.ref = "coroutines" }
-        coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test"; version.ref = "coroutines" }
-        
-        // Kotlinx Datetime
-        kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime"; version.ref = "kotlinxDatetime" }
-        
-        // WorkManager
-        workManager = { module = "androidx.work:work-runtime-ktx"; version.ref = "workManager" }
-        
-        // Play Billing
-        playBilling = { module = "com.android.billingclient:billing"; version.ref = "playBilling" }
-        playBillingKtx = { module = "com.android.billingclient:billing-ktx"; version.ref = "playBilling" }
-        
-        // Ads & UMP
-        playServicesAds = { module = "com.google.android.gms:play-services-ads"; version.ref = "playServicesAds" }
-        ump = { module = "com.google.android.ump:user-messaging-platform"; version.ref = "ump" }
-        
-        // Testing
-        junit = { module = "junit:junit"; version.ref = "junit" }
-        junitJupiter = { module = "org.junit.jupiter:junit-jupiter"; version.ref = "junitJupiter" }
-        truth = { module = "com.google.truth:truth"; version.ref = "truth" }
-        espressoCore = { module = "androidx.test.espresso:espresso-core"; version.ref = "espresso" }
-        espressoContrib = { module = "androidx.test.espresso:espresso-contrib"; version.ref = "espresso" }
-        composeUiTest = { module = "androidx.compose.ui:ui-test-junit4"; version.ref = "composeUiTest" }
-        composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest"; version.ref = "composeUiTest" }
-        robolectric = { module = "org.robolectric:robolectric"; version.ref = "robolectric" }
-        mockk = { module = "io.mockk:mockk"; version.ref = "mockk" }
-        turbine = { module = "app.cash.turbine:turbine"; version.ref = "turbine" }
-    }
-    
-    plugins {
-        androidApplication = { id = "com.android.application"; version.ref = "agp" }
-        kotlinAndroid = { id = "org.jetbrains.kotlin.android"; version.ref = "kotlin" }
-        composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose"; version.ref = "kotlin" }
-        ksp = { id = "com.google.devtools.ksp"; version.ref = "ksp" }
-        hilt = { id = "com.google.dagger.hilt"; version.ref = "hilt" }
-    }
-}
+[versions]
+agp = "8.5.0"
+kotlin = "2.0.0"
+composeBom = "2024.08.00"
+hilt = "2.51.1"
+hiltNavigation = "1.2.0"
+room = "2.6.1"
+lifecycle = "2.8.3"
+navigation = "2.7.7"
+coroutines = "1.8.0"
+kotlinxDatetime = "0.5.0"
+activityCompose = "1.9.1"
+workManager = "2.9.0"
+playBilling = "7.0.0"
+playServicesAds = "23.0.0"
+ump = "3.0.0"
+junit = "4.13.2"
+truth = "1.4.2"
+espresso = "3.5.1"
+robolectric = "4.11"
+mockk = "1.13.14"
+turbine = "1.0.0"
+ksp = "2.0.0-1.0.23"
+androidxTestJunit = "1.2.1"
+
+[libraries]
+composeBom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+composeUi = { module = "androidx.compose.ui:ui" }
+composeMaterial3 = { module = "androidx.compose.material3:material3" }
+composeMaterialIcons = { module = "androidx.compose.material:material-icons-extended" }
+composeActivity = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+composeViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+composeRuntime = { module = "androidx.compose.runtime:runtime" }
+composeFoundation = { module = "androidx.compose.foundation:foundation" }
+composeAnimation = { module = "androidx.compose.animation:animation" }
+composeTooling = { module = "androidx.compose.ui:ui-tooling" }
+composeToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
+
+hiltAndroid = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hiltCompiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
+
+roomRuntime = { module = "androidx.room:room-runtime", version.ref = "room" }
+roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+roomKtx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+lifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycleRuntimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+lifecycleViewModelSavedState = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
+
+navigationCompose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+
+coroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+
+datastorePreferences = { module = "androidx.datastore:datastore-preferences", version = "1.1.1" }
+
+workManager = { module = "androidx.work:work-runtime-ktx", version.ref = "workManager" }
+
+playBilling = { module = "com.android.billingclient:billing", version.ref = "playBilling" }
+playBillingKtx = { module = "com.android.billingclient:billing-ktx", version.ref = "playBilling" }
+
+playServicesAds = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+ump = { module = "com.google.android.ump:user-messaging-platform", version.ref = "ump" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+androidxTestJunit = { module = "androidx.test.ext:junit", version.ref = "androidxTestJunit" }
+composeUiTest = { module = "androidx.compose.ui:ui-test-junit4" }
+composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

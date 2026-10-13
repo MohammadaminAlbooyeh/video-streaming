@@ -2,7 +2,6 @@ package it.bollofacile.di
 
 import android.content.Context
 import androidx.room.Room
-import com.google.android.gms.ads.MobileAds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -83,11 +82,5 @@ object AppModule {
     @Singleton
     fun provideAdManager(@dagger.hilt.android.qualifiers.ApplicationContext context: Context): AdManager {
         return AdManager(context)
-    }
-
-    @Provides
-    @Singleton
-    fun provideMobileAdsInit(@dagger.hilt.android.qualifiers.ApplicationContext context: Context): Unit {
-        MobileAds.initialize(context) {}
     }
 }

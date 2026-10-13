@@ -4,13 +4,6 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "com.android.application") {
-                useModule("com.android.tools.build:gradle:${providers.gradlePluginVersion("com.android.tools.build:gradle").get()}")
-            }
-        }
-    }
 }
 
 dependencyResolutionManagement {
@@ -18,11 +11,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-    }
-    versionCatalogs {
-        create("libs") {
-            from(files("gradle/libs.versions.toml"))
-        }
     }
 }
 

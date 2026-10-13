@@ -1,7 +1,7 @@
 package it.bollofacile.rules
 
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -12,7 +12,7 @@ class RegioniBolloTest {
         val veicoloElettricoRecente = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.ELETTRICA,
-            dataImmatricolazione = LocalDate(2023, 1, 1), regione = Regione.LOMBARDIA
+            dataImmatricolazione = LocalDate.of(2023, 1, 1), regione = Regione.LOMBARDIA
         )
         val result = BolloRules2026.calcolaBollo(veicoloElettricoRecente)
         
@@ -25,7 +25,7 @@ class RegioniBolloTest {
         val veicoloElettricoVecchio = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.ELETTRICA,
-            dataImmatricolazione = LocalDate(2015, 1, 1), regione = Regione.LOMBARDIA
+            dataImmatricolazione = LocalDate.of(2015, 1, 1), regione = Regione.LOMBARDIA
         )
         val result = BolloRules2026.calcolaBollo(veicoloElettricoVecchio)
         
@@ -38,7 +38,7 @@ class RegioniBolloTest {
         val veicoloIbrido = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.IBRIDA,
-            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.LOMBARDIA
+            dataImmatricolazione = LocalDate.of(2020, 1, 1), regione = Regione.LOMBARDIA
         )
         val result = BolloRules2026.calcolaBollo(veicoloIbrido)
         
@@ -52,7 +52,7 @@ class RegioniBolloTest {
         val veicoloIbrido = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.IBRIDA,
-            dataImmatricolazione = LocalDate(2023, 1, 1), regione = Regione.LAZIO
+            dataImmatricolazione = LocalDate.of(2023, 1, 1), regione = Regione.LAZIO
         )
         val result = BolloRules2026.calcolaBollo(veicoloIbrido)
         
@@ -65,7 +65,7 @@ class RegioniBolloTest {
         val veicoloElettricoRecente = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.ELETTRICA,
-            dataImmatricolazione = LocalDate(2023, 1, 1), regione = Regione.LAZIO
+            dataImmatricolazione = LocalDate.of(2023, 1, 1), regione = Regione.LAZIO
         )
         val result = BolloRules2026.calcolaBollo(veicoloElettricoRecente)
         
@@ -79,7 +79,7 @@ class RegioniBolloTest {
         val veicoloIbrido = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.IBRIDA,
-            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.ABRUZZO
+            dataImmatricolazione = LocalDate.of(2020, 1, 1), regione = Regione.ABRUZZO
         )
         val result = BolloRules2026.calcolaBollo(veicoloIbrido)
         
@@ -92,7 +92,7 @@ class RegioniBolloTest {
         val veicoloGpl = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.GPL,
-            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.ABRUZZO
+            dataImmatricolazione = LocalDate.of(2020, 1, 1), regione = Regione.ABRUZZO
         )
         val result = BolloRules2026.calcolaBollo(veicoloGpl)
         
@@ -107,7 +107,7 @@ class RegioniBolloTest {
         val veicolo = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.BENZINA,
-            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.LOMBARDIA
+            dataImmatricolazione = LocalDate.of(2020, 1, 1), regione = Regione.LOMBARDIA
         )
         val resultLombardia = BolloRules2026.calcolaBollo(veicolo)
         

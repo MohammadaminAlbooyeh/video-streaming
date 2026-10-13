@@ -1,0 +1,208 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "805c0d59ebb42c226c5efc5a13ccb83b",
+    "entities": [
+      {
+        "tableName": "veicoli",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `targa` TEXT, `marca` TEXT NOT NULL, `modello` TEXT NOT NULL, `kw` INTEGER NOT NULL, `cv` INTEGER NOT NULL, `classeEuro` TEXT NOT NULL, `alimentazione` TEXT NOT NULL, `dataImmatricolazione` TEXT NOT NULL, `regione` TEXT NOT NULL, `isStorico` INTEGER NOT NULL, `note` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `updatedAt` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targa",
+            "columnName": "targa",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "marca",
+            "columnName": "marca",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "modello",
+            "columnName": "modello",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kw",
+            "columnName": "kw",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cv",
+            "columnName": "cv",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classeEuro",
+            "columnName": "classeEuro",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alimentazione",
+            "columnName": "alimentazione",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataImmatricolazione",
+            "columnName": "dataImmatricolazione",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "regione",
+            "columnName": "regione",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isStorico",
+            "columnName": "isStorico",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "pagamenti",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `veicoloId` INTEGER NOT NULL, `tipo` TEXT NOT NULL, `importo` REAL NOT NULL, `dataPagamento` TEXT NOT NULL, `dataScadenza` TEXT NOT NULL, `note` TEXT NOT NULL, `metodoPagamento` TEXT NOT NULL, `riferimento` TEXT NOT NULL, `createdAt` TEXT NOT NULL, FOREIGN KEY(`veicoloId`) REFERENCES `veicoli`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "veicoloId",
+            "columnName": "veicoloId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tipo",
+            "columnName": "tipo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "importo",
+            "columnName": "importo",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataPagamento",
+            "columnName": "dataPagamento",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataScadenza",
+            "columnName": "dataScadenza",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "metodoPagamento",
+            "columnName": "metodoPagamento",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "riferimento",
+            "columnName": "riferimento",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_pagamenti_veicoloId",
+            "unique": false,
+            "columnNames": [
+              "veicoloId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_pagamenti_veicoloId` ON `${TABLE_NAME}` (`veicoloId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "veicoli",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "veicoloId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '805c0d59ebb42c226c5efc5a13ccb83b')"
+    ]
+  }
+}

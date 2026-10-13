@@ -1,24 +1,29 @@
 package it.bollofacile.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.TimeUnit
+
+private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 @Composable
 fun DatePickerField(
@@ -30,30 +35,55 @@ fun DatePickerField(
     error: String? = null,
     enabled: Boolean = true
 ) {
-    val formattedDate = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    
-    TextField(
-        modifier = modifier.fillMaxWidth(),
-        value = formattedDate,
+    var showDialog by remember { mutableStateOf(false) }
+
+    OutlinedTextField(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(enabled = enabled) { showDialog = true },
+        value = selectedDate.format(dateFormatter),
         onValueChange = { },
-        label = { Text(text = label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+        label = { Text(text = label) },
         placeholder = { Text(text = placeholder) },
         readOnly = true,
+        enabled = false,
         singleLine = true,
         isError = error != null,
-        supportingText = { if (error != null) Text(text = error, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) },
-        trailingIcon = {
-            androidx.compose.material.icons.Icons.Default.CalendarMonth
+        supportingText = {
+            if (error != null) {
+                Text(text = error, color = MaterialTheme.colorScheme.error)
+            }
         },
-        colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
-            containerColor = if (enabled) MaterialTheme.colorScheme.surfaceContainerHighest else MaterialTheme.colorScheme.surfaceContainer,
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer
-        ),
-        keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(keyboardType = KeyboardType.Number),
-        onClick = {
-            // Date picker dialog would be shown here
-            // For now, we'll just show a placeholder
-        }
+        trailingIcon = {
+            Icon(imageVector = Icons.Default.CalendarMonth, contentDescription = label)
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            disabledTextColor = MaterialTheme.colorScheme.onSurface,
+            disabledBorderColor = MaterialTheme.colorScheme.outline,
+            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     )
+
+    if (showDialog) {
+        val state = rememberDatePickerState(
+            initialSelectedDateMillis = TimeUnit.DAYS.toMillis(selectedDate.toEpochDay())
+        )
+        DatePickerDialog(
+            onDismissRequest = { showDialog = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    state.selectedDateMillis?.let { millis ->
+                        onDateSelected(LocalDate.ofEpochDay(TimeUnit.MILLISECONDS.toDays(millis)))
+                    }
+                    showDialog = false
+                }) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) { Text("Annulla") }
+            }
+        ) {
+            DatePicker(state = state)
+        }
+    }
 }

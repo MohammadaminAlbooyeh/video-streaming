@@ -6,6 +6,7 @@ import it.bollofacile.domain.CalcolaRevisioneUseCase
 import it.bollofacile.rules.model.Veicolo
 import javax.inject.Inject
 
+@dagger.hilt.android.lifecycle.HiltViewModel
 class BolloViewModel @Inject constructor(
     private val calcolaBolloUseCase: CalcolaBolloUseCase,
     private val calcolaRevisioneUseCase: CalcolaRevisioneUseCase

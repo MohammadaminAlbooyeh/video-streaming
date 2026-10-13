@@ -1,7 +1,7 @@
 package it.bollofacile.rules
 
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -13,7 +13,7 @@ class SuperbolloTest {
         val veicolo185 = Veicolo(
             marca = "Test", modello = "Test", kw = 185, cv = 251,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.BENZINA,
-            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.LOMBARDIA
+            dataImmatricolazione = LocalDate.of(2020, 1, 1), regione = Regione.LOMBARDIA
         )
         val result185 = BolloRules2026.calcolaBollo(veicolo185)
         assertFalse("185 kW should not trigger superbollo", result185.hasSuperbollo)
@@ -39,7 +39,7 @@ class SuperbolloTest {
             val veicolo = Veicolo(
                 marca = "Test", modello = "Test", kw = kw, cv = (kw * 1.36).toInt(),
                 classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.BENZINA,
-                dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.LOMBARDIA
+                dataImmatricolazione = LocalDate.of(2020, 1, 1), regione = Regione.LOMBARDIA
             )
             val result = BolloRules2026.calcolaBollo(veicolo)
             assertEquals("Superbollo for $kw kW", expectedSuperbollo, result.superbollo, 0.01)
@@ -52,7 +52,7 @@ class SuperbolloTest {
         val veicoloPotenteElettrico = Veicolo(
             marca = "Test", modello = "Test", kw = 200, cv = 272,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.ELETTRICA,
-            dataImmatricolazione = LocalDate(2023, 1, 1), regione = Regione.LOMBARDIA
+            dataImmatricolazione = LocalDate.of(2023, 1, 1), regione = Regione.LOMBARDIA
         )
         val result = BolloRules2026.calcolaBollo(veicoloPotenteElettrico)
         
@@ -67,7 +67,7 @@ class SuperbolloTest {
         val veicoloNormale = Veicolo(
             marca = "Test", modello = "Test", kw = 150, cv = 204,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.BENZINA,
-            dataImmatricolazione = LocalDate(2020, 1, 1), regione = Regione.LOMBARDIA
+            dataImmatricolazione = LocalDate.of(2020, 1, 1), regione = Regione.LOMBARDIA
         )
         assertFalse("150 kW should not be superbollo", veicoloNormale.isSuperbolloApplicable())
         assertEquals("0 kW excess", 0, veicoloNormale.superbolloKwExcess())

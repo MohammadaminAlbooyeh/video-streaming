@@ -8,9 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +24,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.Build
 import it.bollofacile.rules.model.Veicolo
+import it.bollofacile.util.Format
+import it.bollofacile.util.daysUntil
 
 @Composable
 fun ScadenzaCard(
@@ -30,8 +39,8 @@ fun ScadenzaCard(
     revisioneResult: it.bollofacile.rules.model.RevisioneResult,
     onClick: () -> Unit
 ) {
-    val giorniBollo = kotlinx.datetime.LocalDate.now().daysUntil(bolloResult.scadenza).toInt()
-    val giorniRevisione = kotlinx.datetime.LocalDate.now().daysUntil(revisioneResult.prossimaScadenza).toInt()
+    val giorniBollo = java.time.LocalDate.now().daysUntil(bolloResult.scadenza).toInt()
+    val giorniRevisione = java.time.LocalDate.now().daysUntil(revisioneResult.prossimaScadenza).toInt()
     val isBolloScaduto = giorniBollo < 0
     val isRevisioneScaduta = giorniRevisione < 0
     val isBolloUrgente = giorniBollo >= 0 && giorniBollo <= 30
@@ -91,7 +100,7 @@ fun ScadenzaCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         Icon(
-                            imageVector = androidx.compose.material.icons.Icons.Default.AttachMoney,
+                            imageVector = Icons.Default.AttachMoney,
                             contentDescription = "Bollo",
                             tint = if (isBolloScaduto) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
                         )
@@ -121,7 +130,7 @@ fun ScadenzaCard(
                 androidx.compose.foundation.layout.Box(
                     modifier = Modifier
                         .width(1.dp)
-                        .fillMaxHeight()
+                        .height(48.dp)
                         .background(MaterialTheme.colorScheme.outlineVariant)
                 )
                 
@@ -129,7 +138,7 @@ fun ScadenzaCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         Icon(
-                            imageVector = androidx.compose.material.icons.Icons.Default.Build,
+                            imageVector = Icons.Default.Build,
                             contentDescription = "Revisione",
                             tint = if (isRevisioneScaduta) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
                         )
@@ -140,7 +149,7 @@ fun ScadenzaCard(
                         )
                     }
                     Text(
-                        text = revisioneResult.prossimaScadenza.format(it.bollofacile.util.Format.DATE_FORMATTER),
+                        text = revisioneResult.prossimaScadenza.format(Format.DATE_FORMATTER),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )

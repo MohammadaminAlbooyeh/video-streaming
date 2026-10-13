@@ -3,8 +3,6 @@ package it.bollofacile.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import it.bollofacile.data.db.converters.Converters
-import it.bollofacile.rules.model.Veicolo
 
 @Database(
     entities = [VeicoloEntity::class, PagamentoEntity::class],

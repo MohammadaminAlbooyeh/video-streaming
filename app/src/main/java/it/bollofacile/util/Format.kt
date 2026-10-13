@@ -1,7 +1,7 @@
 package it.bollofacile.util
 
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -18,12 +18,12 @@ object Format {
 }
 
 fun String.ifBlank(): String? = if (isBlank()) null else this
-fun String.ifNotBlank(block: (String) -> Unit): String? {
+inline fun String.ifNotBlank(block: (String) -> Unit): String? {
     if (isNotBlank()) block(this)
     return this
 }
 
-fun <T> List<T>.ifNotEmpty(block: (List<T>) -> Unit): List<T>? {
+inline fun <T> List<T>.ifNotEmpty(block: (List<T>) -> Unit): List<T>? {
     if (isNotEmpty()) block(this)
     return this
 }

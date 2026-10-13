@@ -1,6 +1,7 @@
 package it.bollofacile.ads
 
 import android.content.Context
+import it.bollofacile.R
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback

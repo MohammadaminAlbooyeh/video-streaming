@@ -1,13 +1,12 @@
 package it.bollofacile.util
 
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.YearMonth
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.temporal.ChronoUnit
 
-fun LocalDate.daysUntil(other: LocalDate): Long = 
-    this.periodUntil(other, kotlinx.datetime.DateTimePeriod.Unit.Days).days
+fun LocalDate.daysUntil(other: LocalDate): Long = ChronoUnit.DAYS.between(this, other)
 
-fun LocalDate.yearsUntil(other: LocalDate): Int = 
-    this.periodUntil(other, kotlinx.datetime.DateTimePeriod.Unit.Years).years
+fun LocalDate.yearsUntil(other: LocalDate): Int = ChronoUnit.YEARS.between(this, other).toInt()
 
 fun LocalDate.isToday(): Boolean = this == LocalDate.now()
 
@@ -30,3 +29,5 @@ fun Int.monthsFromNow(): LocalDate = LocalDate.now().plusMonths(this.toLong())
 fun Int.yearsAgo(): LocalDate = LocalDate.now().minusYears(this.toLong())
 
 fun Int.yearsFromNow(): LocalDate = LocalDate.now().plusYears(this.toLong())
+
+fun java.time.Month.maxDaysInMonth(year: Int): Int = YearMonth.of(year, this).lengthOfMonth()

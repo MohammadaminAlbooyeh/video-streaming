@@ -2,9 +2,9 @@
     <string name="app_name">BolloFacile</string>
     
     <!-- AdMob (sostituire con i tuoi ID) -->
-    <string name="admob_app_id">ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX</string>
-    <string name="admob_banner_id">ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX</string>
-    <string name="admob_interstitial_id">ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX</string>
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>
     
     <!-- Home -->
     <string name="home_title">I tuoi veicoli</string>
@@ -132,4 +132,19 @@
     <string name="delete_confirm">Eliminare questo veicolo?</string>
     <string name="delete_confirm_text">L\'azione non può essere annullata.</string>
     <string name="delete">Elimina</string>
+    <string name="back">Indietro</string>
+    <string name="bollo">Bollo</string>
+    <string name="delay_days_fmt">Ritardo: %1$d giorni</string>
+    <string name="edit">Modifica</string>
+    <string name="historic_label">Veicolo storico</string>
+    <string name="in_years_fmt">tra %1$d anni</string>
+    <string name="not_done">Non effettuata</string>
+    <string name="options">Opzioni</string>
+    <string name="payment_data">Dati pagamento</string>
+    <string name="plate_label">Targa</string>
+    <string name="power">Potenza</string>
+    <string name="ravvedimento_band_fmt">Fascia ravvedimento: %1$s</string>
+    <string name="stat_deadlines">Scadenze</string>
+    <string name="stat_vehicles">Veicoli</string>
+    <string name="vehicle_data">Dati veicolo</string>
 </resources>

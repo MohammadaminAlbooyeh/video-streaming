@@ -1,7 +1,9 @@
 package it.bollofacile.rules
 
+import it.bollofacile.util.daysUntil
+import it.bollofacile.util.maxDaysInMonth
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 
 object RegioniBollo {
 
@@ -74,17 +76,16 @@ object RegioniBollo {
         val note: String
     )
 
-    fun getRiduzioneRegionale(regione: Regione, veicolo: Veicolo, base: Double): Double {
-        val rule = REGIONAL_RULES[regione] ?: return 0.0
-        
+    fun getRiduzioneAlimentazione(regione: Regione, veicolo: Veicolo, base: Double): Double {
+        val rule = REGIONAL_RULES[regione]
         val eta = LocalDate.now().year - veicolo.dataImmatricolazione.year
-        
+
         return when (veicolo.alimentazione) {
             Alimentazione.ELETTRICA -> {
-                if (rule.esenzioniElettriche && eta <= rule.anniEsenzioneElettrica) base else 0.0
+                if (rule != null && rule.esenzioniElettriche && eta <= rule.anniEsenzioneElettrica) base else 0.0
             }
             Alimentazione.IBRIDA -> {
-                if (rule.esenzioniIbride) base * rule.riduzioneIbrida else 0.0
+                if (rule != null && rule.esenzioniIbride) base * rule.riduzioneIbrida else 0.0
             }
             Alimentazione.GPL, Alimentazione.METANO -> {
                 // Riduzione nazionale 75% per GPL/Metano

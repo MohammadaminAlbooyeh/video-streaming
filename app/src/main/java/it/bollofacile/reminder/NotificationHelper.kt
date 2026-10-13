@@ -53,9 +53,9 @@ object NotificationHelper {
         createNotificationChannels(context)
         
         val (channelId, title, contentText) = when (tipo) {
-            "bollo" -> CHANNEL_BOLLO to "Bollo in scadenza" to "Il bollo per il tuo veicolo sta per scadere"
-            "revisione" -> CHANNEL_REVISIONE to "Revisione in scadenza" to "La revisione per il tuo veicolo sta per scadere"
-            else -> CHANNEL_BOLLO to "Scadenza" to "Hai una scadenza in arrivo"
+            "bollo" -> Triple(CHANNEL_BOLLO, "Bollo in scadenza", "Il bollo per il tuo veicolo sta per scadere")
+            "revisione" -> Triple(CHANNEL_REVISIONE, "Revisione in scadenza", "La revisione per il tuo veicolo sta per scadere")
+            else -> Triple(CHANNEL_BOLLO, "Scadenza", "Hai una scadenza in arrivo")
         }
 
         val intent = Intent(context, MainActivity::class.java).apply {

@@ -1,8 +1,10 @@
 package it.bollofacile.rules
 
+import it.bollofacile.util.daysUntil
+import it.bollofacile.util.maxDaysInMonth
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.YearMonth
+import java.time.LocalDate
+import java.time.YearMonth
 
 object RevisioneRules {
 
@@ -21,42 +23,17 @@ object RevisioneRules {
         
         val ora = LocalDate.now()
         val annoImm = dataImmatricolazione.year
-        val meseImm = dataImmatricolazione.month
-        
-        // Se c'è un'ultima revisione, calcola da quella
-        val baseDate = ultimaRevisione ?: dataImmatricolazione
-        val anniDaBase = YearMonth.from(baseDate).yearsUntil(YearMonth.from(ora)).years
-        
-        var prossimaScadenza: LocalDate
-        var anniProssima: Int
-        
-        if (ultimaRevisione == null) {
-            // Prima revisione
-            if (anniDaBase < 4) {
-                prossimaScadenza = LocalDate(annoImm + 4, meseImm, meseImm.maxDaysInMonth(annoImm + 4))
-                anniProssima = 4 - anniDaBase
-            } else {
-                // Già passati 4 anni, calcola cicli da 2 anni
-                val anniPassati = anniDaBase - 4
-                val cicliCompleti = anniPassati / 2
-                val prossimoCiclo = cicliCompleti + 1
-                prossimaScadenza = LocalDate(annoImm + 4 + prossimoCiclo * 2, meseImm, meseImm.maxDaysInMonth(annoImm + 4 + prossimoCiclo * 2))
-                anniProssima = (4 + prossimoCiclo * 2) - anniDaBase
-            }
+
+        // Prima revisione: 4 anni dall'immatricolazione; successive: 2 anni dall'ultima.
+        // La scadenza è l'ultimo giorno del mese di riferimento, anche se già passata.
+        val prossimaScadenza: LocalDate = if (ultimaRevisione == null) {
+            val anno = annoImm + 4
+            LocalDate.of(anno, dataImmatricolazione.month, dataImmatricolazione.month.maxDaysInMonth(anno))
         } else {
-            // Revisioni successive: ogni 2 anni
-            val anniDaUltima = YearMonth.from(ultimaRevisione).yearsUntil(YearMonth.from(ora)).years
-            if (anniDaUltima < 2) {
-                prossimaScadenza = LocalDate(ultimaRevisione.year + 2, ultimaRevisione.month, ultimaRevisione.month.maxDaysInMonth(ultimaRevisione.year + 2))
-                anniProssima = 2 - anniDaUltima
-            } else {
-                val anniPassati = anniDaUltima - 2
-                val cicliCompleti = anniPassati / 2
-                val prossimoCiclo = cicliCompleti + 1
-                prossimaScadenza = LocalDate(ultimaRevisione.year + 2 + prossimoCiclo * 2, ultimaRevisione.month, ultimaRevisione.month.maxDaysInMonth(ultimaRevisione.year + 2 + prossimoCiclo * 2))
-                anniProssima = (2 + prossimoCiclo * 2) - anniDaUltima
-            }
+            val anno = ultimaRevisione.year + 2
+            LocalDate.of(anno, ultimaRevisione.month, ultimaRevisione.month.maxDaysInMonth(anno))
         }
+        val anniProssima = prossimaScadenza.year - ora.year
 
         // Veicoli storici: revisione ogni 2 anni dopo i 30 anni
         var note = ""

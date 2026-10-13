@@ -2,7 +2,7 @@ package it.bollofacile.domain
 
 import it.bollofacile.rules.SanzioniRules
 import it.bollofacile.rules.model.SanzioneResult
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 import javax.inject.Inject
 
 class CalcolaSanzioneUseCase @Inject constructor() {

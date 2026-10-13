@@ -7,6 +7,7 @@ import it.bollofacile.data.prefs.SettingsStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 
 class ReminderReceiver : BroadcastReceiver() {
 

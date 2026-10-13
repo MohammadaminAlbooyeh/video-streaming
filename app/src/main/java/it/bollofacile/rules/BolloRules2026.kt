@@ -1,8 +1,10 @@
 package it.bollofacile.rules
 
+import it.bollofacile.util.daysUntil
+import it.bollofacile.util.maxDaysInMonth
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.YearMonth
+import java.time.LocalDate
+import java.time.YearMonth
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -19,24 +21,13 @@ object BolloRules2026 {
         200 to 6.50
     )
 
-    // Coefficienti per classe Euro (riduzioni)
-    private val COEFFICIENTI_EURO = mapOf(
-        ClasseEuro.EURO_0 to 1.0,
-        ClasseEuro.EURO_1 to 1.0,
-        ClasseEuro.EURO_2 to 1.0,
-        ClasseEuro.EURO_3 to 0.9,
-        ClasseEuro.EURO_4 to 0.8,
-        ClasseEuro.EURO_5 to 0.7,
-        ClasseEuro.EURO_6 to 0.6
-    )
-
     // Superbollo: 20€ per ogni kW oltre 185
     const val SUPERBOLLO_PER_KW = 20.0
     const val SOGLIA_SUPERBOLLO_KW = 185
 
     fun calcolaBollo(veicolo: Veicolo, regione: Regione = veicolo.regione): BolloResult {
         // Veicoli storici (30+ anni) esenti
-        val eta = YearMonth.from(veicolo.dataImmatricolazione).yearsUntil(YearMonth.from(LocalDate.now())).years
+        val eta = YearMonth.from(veicolo.dataImmatricolazione).until(YearMonth.from(LocalDate.now()), java.time.temporal.ChronoUnit.YEARS).toInt()
         if (veicolo.isStorico || eta >= 30) {
             return BolloResult(
                 bolloBase = 0.0,
@@ -52,11 +43,10 @@ object BolloRules2026 {
 
         val bolloBase = calcolaBolloBase(veicolo, regione)
         val superbollo = calcolaSuperbollo(veicolo)
-        val riduzioneAlim = calcolaRiduzioneAlimentazione(veicolo, bolloBase)
-        val riduzioneRegionale = calcolaRiduzioneRegionale(veicolo, regione, bolloBase)
-        val riduzioneEuro = calcolaRiduzioneEuro(veicolo, bolloBase)
+        val riduzioneAlim = RegioniBollo.getRiduzioneAlimentazione(regione, veicolo, bolloBase)
 
-        val totale = (bolloBase - riduzioneAlim - riduzioneRegionale - riduzioneEuro + superbollo).coerceAtLeast(0.0)
+        // Il superbollo non è soggetto a riduzioni: si somma per intero al bollo ridotto
+        val totale = (bolloBase - riduzioneAlim).coerceAtLeast(0.0) + superbollo
         val scadenza = calcolaScadenzaBollo(veicolo.dataImmatricolazione)
 
         return BolloResult(
@@ -64,10 +54,10 @@ object BolloRules2026 {
             superbollo = arrotonda(superbollo),
             riduzioneAlimentazione = arrotonda(riduzioneAlim),
             riduzioneStorico = 0.0,
-            riduzioneRegionale = arrotonda(riduzioneRegionale + riduzioneEuro),
+            riduzioneRegionale = 0.0,
             totale = arrotonda(totale),
             scadenza = scadenza,
-            dettaglio = buildDettaglio(veicolo, bolloBase, superbollo, riduzioneAlim, riduzioneRegionale + riduzioneEuro, totale)
+            dettaglio = buildDettaglio(veicolo, bolloBase, superbollo, riduzioneAlim, 0.0, totale)
         )
     }
 
@@ -87,24 +77,11 @@ object BolloRules2026 {
         return kwEccedenti * SUPERBOLLO_PER_KW
     }
 
-    private fun calcolaRiduzioneAlimentazione(veicolo: Veicolo, base: Double): Double {
-        return base * veicolo.alimentazione.bolloReduction
-    }
-
-    private fun calcolaRiduzioneEuro(veicolo: Veicolo, base: Double): Double {
-        val coeff = COEFFICIENTI_EURO[veicolo.classeEuro] ?: 1.0
-        return base * (1.0 - coeff)
-    }
-
-    private fun calcolaRiduzioneRegionale(veicolo: Veicolo, regione: Regione, base: Double): Double {
-        return RegioniBollo.getRiduzioneRegionale(regione, veicolo, base)
-    }
-
     private fun calcolaScadenzaBollo(dataImm: LocalDate): LocalDate {
         // Scadenza: ultimo giorno del mese di immatricolazione
         val annoCorrente = LocalDate.now().year
         val meseImm = dataImm.month
-        return LocalDate(annoCorrente, meseImm, meseImm.maxDaysInMonth(annoCorrente))
+        return LocalDate.of(annoCorrente, meseImm, meseImm.maxDaysInMonth(annoCorrente))
     }
 
     private fun arrotonda(value: Double): Double {

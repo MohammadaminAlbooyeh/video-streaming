@@ -1,7 +1,9 @@
 package it.bollofacile.rules
 
+import it.bollofacile.util.daysUntil
+import it.bollofacile.util.maxDaysInMonth
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -59,7 +61,7 @@ object SanzioniRules {
         }
 
         // Sanzione base (30% con minimo €25)
-        val sanzioneBase = (importoBollo * SANZIONE_PERCENTUALE).coerceAtLeast(SANZIONE_MINIMA).coerceAtMost(importoBollo)
+        val sanzioneBase = (importoBollo * SANZIONE_PERCENTUALE).coerceAtLeast(SANZIONE_MINIMA)
         
         // Interessi legali (giornalieri)
         val interessiGiornalieri = importoBollo * INTERESSE_LEGALE_ANNUO / 365
@@ -91,7 +93,7 @@ object SanzioniRules {
     fun getProssimeScadenzeRavvedimento(dataScadenza: LocalDate): List<ScadenzaRavvedimento> {
         return FASCE_RAVVEDIMENTO.map { fascia ->
             ScadenzaRavvedimento(
-                dataLimite = dataScadenza.plusDays(fascia.giorniMax),
+                dataLimite = dataScadenza,
                 descrizione = fascia.descrizione,
                 riduzione = fascia.riduzione
             )

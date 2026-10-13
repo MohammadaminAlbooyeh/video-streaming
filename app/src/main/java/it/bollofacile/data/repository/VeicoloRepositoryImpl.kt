@@ -2,6 +2,7 @@ package it.bollofacile.data.repository
 
 import it.bollofacile.data.db.AppDatabase
 import it.bollofacile.data.db.VeicoloEntity
+import it.bollofacile.data.db.toEntity
 import it.bollofacile.rules.model.Veicolo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

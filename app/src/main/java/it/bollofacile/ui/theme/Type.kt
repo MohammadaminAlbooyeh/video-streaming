@@ -28,10 +28,11 @@ val AppTypography = Typography(
 
 @Composable
 fun Theme(
-    darkTheme: Boolean = false,
+    darkTheme: Boolean = androidx.compose.foundation.isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
+        colorScheme = if (darkTheme) DarkColors else LightColors,
         typography = AppTypography,
         content = content
     )

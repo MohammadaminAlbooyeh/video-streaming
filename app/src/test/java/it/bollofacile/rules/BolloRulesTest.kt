@@ -1,7 +1,7 @@
 package it.bollofacile.rules
 
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -14,7 +14,7 @@ class BolloRulesTest {
         cv = 102,
         classeEuro = ClasseEuro.EURO_6,
         alimentazione = Alimentazione.BENZINA,
-        dataImmatricolazione = LocalDate(2020, 6, 15),
+        dataImmatricolazione = LocalDate.of(2020, 6, 15),
         regione = Regione.LOMBARDIA
     )
 
@@ -40,7 +40,7 @@ class BolloRulesTest {
     @Test
     fun testHistoricVehicleExempt() {
         val veicoloStorico = veicoloStandard.copy(
-            dataImmatricolazione = LocalDate(1990, 1, 1),
+            dataImmatricolazione = LocalDate.of(1990, 1, 1),
             isStorico = true
         )
         val result = BolloRules2026.calcolaBollo(veicoloStorico)
@@ -53,7 +53,7 @@ class BolloRulesTest {
     fun testElectricVehicleReduction() {
         val veicoloElettrico = veicoloStandard.copy(
             alimentazione = Alimentazione.ELETTRICA,
-            dataImmatricolazione = LocalDate(2023, 1, 1)
+            dataImmatricolazione = LocalDate.of(2023, 1, 1)
         )
         val result = BolloRules2026.calcolaBollo(veicoloElettrico)
         
@@ -100,7 +100,7 @@ class BolloRulesTest {
         val result = BolloRules2026.calcolaBollo(veicoloStandard)
         
         // Scadenza dovrebbe essere fine mese di immatricolazione (giugno)
-        assertEquals("Scadenza should be end of June", 6, result.scadenza.month.number)
+        assertEquals("Scadenza should be end of June", 6, result.scadenza.monthValue)
         assertEquals("Scadenza should be last day of month", 30, result.scadenza.dayOfMonth)
     }
 }

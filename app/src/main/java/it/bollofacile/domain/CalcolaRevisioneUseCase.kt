@@ -6,7 +6,7 @@ import it.bollofacile.rules.model.Veicolo
 import javax.inject.Inject
 
 class CalcolaRevisioneUseCase @Inject constructor() {
-    operator fun invoke(veicolo: Veicolo, ultimaRevisione: kotlinx.datetime.LocalDate? = null): RevisioneResult {
+    operator fun invoke(veicolo: Veicolo, ultimaRevisione: java.time.LocalDate? = null): RevisioneResult {
         return RevisioneRules.calcolaProssimaRevisione(
             dataImmatricolazione = veicolo.dataImmatricolazione,
             ultimaRevisione = ultimaRevisione,

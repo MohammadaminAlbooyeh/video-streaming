@@ -1,12 +1,7 @@
 plugins {
-    alias(plugins.androidApplication) apply false
-    alias(plugins.kotlinAndroid) apply false
-    alias(plugins.composeCompiler) apply false
-    alias(plugins.ksp) apply false
-    alias(plugins.hilt) apply false
-}
-
-allprojects {
-    group = "it.bollofacile"
-    version = "1.0.0"
+    alias(libs.plugins.androidApplication) apply false
+    alias(libs.plugins.kotlinAndroid) apply false
+    alias(libs.plugins.composeCompiler) apply false
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.hilt) apply false
 }

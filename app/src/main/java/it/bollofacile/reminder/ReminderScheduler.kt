@@ -55,8 +55,8 @@ class ReminderScheduler(
         // Bollo reminders
         if (!scadenza.isBolloScaduto) {
             for (days in reminderDays) {
-                val triggerDate = scadenza.bolloResult.scadenza.minusDays(days)
-                if (triggerDate >= kotlinx.datetime.LocalDate.now()) {
+                val triggerDate = scadenza.bolloResult.scadenza.minusDays(days.toLong())
+                if (triggerDate >= java.time.LocalDate.now()) {
                     setAlarm(alarmManager, veicoloId, "bollo", triggerDate)
                 }
             }
@@ -65,8 +65,8 @@ class ReminderScheduler(
         // Revisione reminders
         if (!scadenza.isRevisioneScaduta) {
             for (days in reminderDays) {
-                val triggerDate = scadenza.revisioneResult.prossimaScadenza.minusDays(days)
-                if (triggerDate >= kotlinx.datetime.LocalDate.now()) {
+                val triggerDate = scadenza.revisioneResult.prossimaScadenza.minusDays(days.toLong())
+                if (triggerDate >= java.time.LocalDate.now()) {
                     setAlarm(alarmManager, veicoloId, "revisione", triggerDate)
                 }
             }
@@ -77,7 +77,7 @@ class ReminderScheduler(
         alarmManager: AlarmManager,
         veicoloId: Long,
         tipo: String,
-        triggerDate: kotlinx.datetime.LocalDate
+        triggerDate: java.time.LocalDate
     ) {
         val intent = Intent(context, ReminderReceiver::class.java).apply {
             action = ACTION_CHECK_REMINDERS
@@ -90,7 +90,7 @@ class ReminderScheduler(
         
         val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags)
 
-        val triggerMillis = triggerDate.atTime(9, 0).toInstant(kotlinx.datetime.TimeZone.currentSystemDefault()).toEpochMilliseconds()
+        val triggerMillis = triggerDate.atTime(9, 0).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (alarmManager.canScheduleExactAlarms()) {

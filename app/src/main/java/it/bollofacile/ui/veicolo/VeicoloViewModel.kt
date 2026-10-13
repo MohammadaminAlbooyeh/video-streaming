@@ -1,6 +1,7 @@
 package it.bollofacile.ui.veicolo
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import androidx.lifecycle.viewModelScope
 import it.bollofacile.data.repository.VeicoloRepository
 import it.bollofacile.domain.CalcolaBolloUseCase
@@ -11,29 +12,30 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class VeicoloViewModel @Inject constructor(
     private val veicoloRepository: VeicoloRepository,
     private val calcolaBolloUseCase: CalcolaBolloUseCase,
     private val calcolaRevisioneUseCase: CalcolaRevisioneUseCase
 ) : ViewModel() {
     
-    fun getVeiculo(id: Long): Flow<Veicolo?> {
+    fun getVeicolo(id: Long): Flow<Veicolo?> {
         return veicoloRepository.getById(id).distinctUntilChanged()
     }
     
-    fun insertVeiculo(veicolo: Veicolo) {
+    fun insertVeicolo(veicolo: Veicolo) {
         viewModelScope.launch {
             veicoloRepository.insert(veicolo)
         }
     }
     
-    fun updateVeiculo(veicolo: Veicolo) {
+    fun updateVeicolo(veicolo: Veicolo) {
         viewModelScope.launch {
             veicoloRepository.update(veicolo)
         }
     }
     
-    fun deleteVeiculo(id: Long) {
+    fun deleteVeicolo(id: Long) {
         viewModelScope.launch {
             veicoloRepository.delete(id)
         }

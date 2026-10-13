@@ -1,4 +1,11 @@
 package it.bollofacile.ui.settings
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +15,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
@@ -24,26 +34,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import it.bollofacile.R
 import it.bollofacile.data.prefs.SettingsStore
 import it.bollofacile.rules.model.Regione
 import it.bollofacile.ui.components.DropdownField
 import it.bollofacile.ui.components.Panel
 import it.bollofacile.ui.theme.Theme
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
+import androidx.compose.ui.platform.LocalContext
 import javax.inject.Inject
 
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit
 ) {
-    val settingsStore = androidx.hilt.navigation.compose.hiltViewModel<SettingsViewModel>().settingsStore
-    val theme by settingsStore.theme.collectAsStateWithLifecycle()
-    val regioneDefault by settingsStore.regioneDefault.collectAsStateWithLifecycle()
-    val reminderDays by settingsStore.reminderDays.collectAsStateWithLifecycle()
-    val notificationsEnabled by settingsStore.notificationsEnabled.collectAsStateWithLifecycle()
-    val isPro by settingsStore.isProEnabled.collectAsStateWithLifecycle()
+    val viewModel = hiltViewModel<SettingsViewModel>()
+    val theme by viewModel.settingsStore.theme.collectAsStateWithLifecycle(initialValue = SettingsStore.THEME_SYSTEM)
+    val regioneDefault by viewModel.settingsStore.regioneDefault.collectAsStateWithLifecycle(initialValue = "LOM")
+    val reminderDays by viewModel.settingsStore.reminderDays.collectAsStateWithLifecycle(initialValue = emptyList())
+    val notificationsEnabled by viewModel.settingsStore.notificationsEnabled.collectAsStateWithLifecycle(initialValue = true)
+    val isPro by viewModel.settingsStore.isProEnabled.collectAsStateWithLifecycle(initialValue = false)
+    val activity = LocalContext.current as? android.app.Activity
     
     Theme {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -58,8 +71,8 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(text = "Impostazioni", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-                    androidx.compose.material3.IconButton(onClick = onNavigateBack) {
-                        Icon(imageVector = androidx.compose.material.icons.Icons.Default.Close, contentDescription = "Chiudi")
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(imageVector = Icons.Default.Close, contentDescription = "Chiudi")
                     }
                 }
                 
@@ -75,14 +88,12 @@ fun SettingsScreen(
                                 Text(text = "Tema")
                                 Text(text = "Scegli l'aspetto dell'app", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            androidx.compose.material3.MenuButton(onClick = { /* show dropdown */ }) {
-                                androidx.compose.material3.Text(text = when (theme) {
-                                    0 -> "Sistema"
-                                    1 -> "Chiaro"
-                                    2 -> "Scuro"
-                                    else -> "Sistema"
-                                })
-                            }
+                            Text(text = when (theme) {
+                                0 -> "Sistema"
+                                1 -> "Chiaro"
+                                2 -> "Scuro"
+                                else -> "Sistema"
+                            })
                         }
                         
                         // Simplified theme selection
@@ -90,9 +101,9 @@ fun SettingsScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            ThemeOption(text = "Sistema", selected = theme == 0, onClick = { settingsStore.setTheme(0) })
-                            ThemeOption(text = "Chiaro", selected = theme == 1, onClick = { settingsStore.setTheme(1) })
-                            ThemeOption(text = "Scuro", selected = theme == 2, onClick = { settingsStore.setTheme(2) })
+                            ThemeOption(modifier = Modifier.weight(1f), text = "Sistema", selected = theme == 0, onClick = { viewModel.setTheme(0) })
+                            ThemeOption(modifier = Modifier.weight(1f), text = "Chiaro", selected = theme == 1, onClick = { viewModel.setTheme(1) })
+                            ThemeOption(modifier = Modifier.weight(1f), text = "Scuro", selected = theme == 2, onClick = { viewModel.setTheme(2) })
                         }
                     }
                 }
@@ -105,7 +116,7 @@ fun SettingsScreen(
                         selectedOption = Regione.values().first { it.codice == regioneDefault }.nome,
                         onOptionSelected = { nome -> 
                             val regione = Regione.values().first { it.nome == nome }
-                            settingsStore.setRegioneDefault(regione.codice)
+                            viewModel.setRegioneDefault(regione.codice)
                         }
                     )
                 }
@@ -124,7 +135,7 @@ fun SettingsScreen(
                             }
                             Switch(
                                 checked = notificationsEnabled,
-                                onCheckedChange = { settingsStore.setNotificationsEnabled(it) }
+                                onCheckedChange = { viewModel.setNotificationsEnabled(it) }
                             )
                         }
                         
@@ -136,11 +147,11 @@ fun SettingsScreen(
                             ) {
                                 listOf(30, 15, 7, 3, 1).forEach { day ->
                                     val isSelected = day in reminderDays
-                                    androidx.compose.material3.FilterChip(
+                                    FilterChip(
                                         selected = isSelected,
                                         onClick = { 
                                             val newDays = if (isSelected) reminderDays.filter { it != day } else reminderDays + day
-                                            settingsStore.setReminderDays(newDays.sorted())
+                                            viewModel.setReminderDays(newDays.sorted())
                                         },
                                         label = { Text(text = "$day gg") }
                                     )
@@ -163,7 +174,7 @@ fun SettingsScreen(
                                     Text(text = "Pro attivo", fontWeight = FontWeight.Bold)
                                     Text(text = "Tutte le funzionalità sbloccate", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
                                 }
-                                Icon(imageVector = androidx.compose.material.icons.Icons.Default.CheckCircle, contentDescription = "Pro", tint = MaterialTheme.colorScheme.primary)
+                                Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Pro", tint = MaterialTheme.colorScheme.primary)
                             }
                         } else {
                             Button(onClick = { /* navigate to pro screen */ }, modifier = Modifier.fillMaxWidth()) {
@@ -177,6 +188,24 @@ fun SettingsScreen(
                     }
                 }
                 
+                // Export dati (Pro)
+                Panel(title = "Dati") {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            text = if (isPro) "Esporta veicoli e pagamenti in formato CSV" else "L'export dati è una funzionalità Pro",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Button(
+                            onClick = { activity?.let { viewModel.exportCsv(it) } },
+                            enabled = isPro && activity != null,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Esporta dati (CSV)")
+                        }
+                    }
+                }
+
                 // Info
                 Panel(title = "Informazioni") {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -186,13 +215,13 @@ fun SettingsScreen(
                         }
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Text(text = "Privacy Policy")
-                            androidx.compose.material3.TextButton(onClick = { /* open privacy */ }) {
+                            TextButton(onClick = { /* open privacy */ }) {
                                 Text(text = "Leggi")
                             }
                         }
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Text(text = "Open Source Licenses")
-                            androidx.compose.material3.TextButton(onClick = { /* open licenses */ }) {
+                            TextButton(onClick = { /* open licenses */ }) {
                                 Text(text = "Visualizza")
                             }
                         }
@@ -204,10 +233,10 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun ThemeOption(text: String, selected: Boolean, onClick: () -> Unit) {
-    androidx.compose.material3.OutlinedButton(
+private fun ThemeOption(modifier: Modifier = Modifier, text: String, selected: Boolean, onClick: () -> Unit) {
+    OutlinedButton(
         onClick = onClick,
-        modifier = Modifier.weight(1f),
+        modifier = modifier,
         colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
             containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHighest,
             contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
@@ -217,6 +246,27 @@ private fun ThemeOption(text: String, selected: Boolean, onClick: () -> Unit) {
     }
 }
 
+@dagger.hilt.android.lifecycle.HiltViewModel
 class SettingsViewModel @Inject constructor(
-    val settingsStore: SettingsStore
-) : ViewModel()
+    val settingsStore: SettingsStore,
+    private val veicoloRepository: it.bollofacile.data.repository.VeicoloRepository,
+    private val database: it.bollofacile.data.db.AppDatabase
+) : ViewModel() {
+    fun setTheme(theme: Int) = viewModelScope.launch { settingsStore.setTheme(theme) }
+    fun setRegioneDefault(codice: String) = viewModelScope.launch { settingsStore.setRegioneDefault(codice) }
+    fun setNotificationsEnabled(enabled: Boolean) = viewModelScope.launch { settingsStore.setNotificationsEnabled(enabled) }
+    fun setReminderDays(days: List<Int>) = viewModelScope.launch { settingsStore.setReminderDays(days) }
+
+    fun exportCsv(activity: android.app.Activity) = viewModelScope.launch {
+        val veicoli = veicoloRepository.getAll().first()
+        val pagamenti = database.pagamentoDao().getAllOnce()
+        val csv = it.bollofacile.util.Export.buildCsv(veicoli, pagamenti)
+        val file = it.bollofacile.util.Export.writeCsvFile(activity.applicationContext, csv)
+        it.bollofacile.util.Share.shareFile(
+            activity,
+            file,
+            "${activity.packageName}.fileprovider",
+            "Export dati BolloFacile"
+        )
+    }
+}

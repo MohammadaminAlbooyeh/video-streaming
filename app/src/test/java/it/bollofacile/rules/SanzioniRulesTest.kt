@@ -1,7 +1,8 @@
 package it.bollofacile.rules
 
+import it.bollofacile.util.daysUntil
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -9,8 +10,8 @@ class SanzioniRulesTest {
 
     @Test
     fun testNoPenaltyIfOnTime() {
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2024, 6, 30)
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2024, 6, 30)
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -24,8 +25,8 @@ class SanzioniRulesTest {
 
     @Test
     fun testPenaltyWithin14Days() {
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2024, 7, 10) // 10 giorni dopo
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2024, 7, 10) // 10 giorni dopo
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -40,8 +41,8 @@ class SanzioniRulesTest {
 
     @Test
     fun testPenaltyWithin30Days() {
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2024, 7, 20) // 20 giorni dopo
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2024, 7, 20) // 20 giorni dopo
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -53,8 +54,8 @@ class SanzioniRulesTest {
 
     @Test
     fun testPenaltyWithin90Days() {
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2024, 9, 15) // ~77 giorni dopo
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2024, 9, 15) // ~77 giorni dopo
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -66,8 +67,8 @@ class SanzioniRulesTest {
 
     @Test
     fun testPenaltyWithin1Year() {
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2025, 3, 15) // ~258 giorni dopo
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2025, 3, 15) // ~258 giorni dopo
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -79,8 +80,8 @@ class SanzioniRulesTest {
 
     @Test
     fun testPenaltyWithin2Years() {
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2026, 1, 15) // ~564 giorni dopo
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2026, 1, 15) // ~564 giorni dopo
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -92,8 +93,8 @@ class SanzioniRulesTest {
 
     @Test
     fun testPenaltyOver2Years() {
-        val scadenza = LocalDate(2022, 6, 30)
-        val pagamento = LocalDate(2025, 1, 15) // ~929 giorni dopo
+        val scadenza = LocalDate.of(2022, 6, 30)
+        val pagamento = LocalDate.of(2025, 1, 15) // ~929 giorni dopo
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -106,8 +107,8 @@ class SanzioniRulesTest {
     @Test
     fun testMinimumPenalty() {
         // Importo molto basso: sanzione minima €25
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2024, 7, 10)
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2024, 7, 10)
         
         val result = SanzioniRules.calcolaSanzione(10.0, scadenza, pagamento)
         
@@ -118,8 +119,8 @@ class SanzioniRulesTest {
     @Test
     fun testMaximumPenalty() {
         // Importo alto: sanzione max = importo dovuto
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2024, 7, 10)
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2024, 7, 10)
         
         val result = SanzioniRules.calcolaSanzione(10000.0, scadenza, pagamento)
         
@@ -129,8 +130,8 @@ class SanzioniRulesTest {
 
     @Test
     fun testInterestCalculation() {
-        val scadenza = LocalDate(2024, 6, 30)
-        val pagamento = LocalDate(2024, 7, 30) // 30 giorni dopo
+        val scadenza = LocalDate.of(2024, 6, 30)
+        val pagamento = LocalDate.of(2024, 7, 30) // 30 giorni dopo
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -141,7 +142,7 @@ class SanzioniRulesTest {
 
     @Test
     fun testRavvedimentoDeadlines() {
-        val scadenza = LocalDate(2024, 6, 30)
+        val scadenza = LocalDate.of(2024, 6, 30)
         val scadenze = SanzioniRules.getProssimeScadenzeRavvedimento(scadenza)
         
         assertEquals("5 fasce di ravvedimento", 5, scadenze.size)

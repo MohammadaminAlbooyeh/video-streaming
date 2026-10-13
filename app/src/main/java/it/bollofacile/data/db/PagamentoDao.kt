@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PagamentoDao {
+    @Query("SELECT * FROM pagamenti ORDER BY dataPagamento DESC")
+    suspend fun getAllOnce(): List<PagamentoEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(pagamento: PagamentoEntity): Long
 
@@ -19,7 +22,7 @@ interface PagamentoDao {
     fun getByVeicoloIdAndTipo(veicoloId: Long, tipo: PagamentoEntity.TipoPagamento): Flow<List<PagamentoEntity>>
 
     @Query("SELECT * FROM pagamenti WHERE dataScadenza BETWEEN :start AND :end ORDER BY dataScadenza")
-    fun getScadenzeInRange(start: kotlinx.datetime.LocalDate, end: kotlinx.datetime.LocalDate): Flow<List<PagamentoEntity>>
+    fun getScadenzeInRange(start: java.time.LocalDate, end: java.time.LocalDate): Flow<List<PagamentoEntity>>
 
     @Query("SELECT SUM(importo) FROM pagamenti WHERE veicoloId = :veicoloId AND tipo = :tipo AND strftime('%Y', dataPagamento) = :anno")
     suspend fun getTotaleAnnuale(veicoloId: Long, tipo: PagamentoEntity.TipoPagamento, anno: String): Double?

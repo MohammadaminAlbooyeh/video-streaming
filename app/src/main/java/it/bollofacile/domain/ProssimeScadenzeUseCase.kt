@@ -1,5 +1,7 @@
 package it.bollofacile.domain
 
+import it.bollofacile.util.daysUntil
+import it.bollofacile.util.maxDaysInMonth
 import it.bollofacile.data.repository.VeicoloRepository
 import it.bollofacile.rules.BolloRules2026
 import it.bollofacile.rules.RevisioneRules
@@ -9,7 +11,7 @@ import it.bollofacile.rules.model.Veicolo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 import javax.inject.Inject
 
 data class ScadenzaVeicolo(

@@ -1,7 +1,7 @@
 package it.bollofacile.rules
 
 import it.bollofacile.rules.model.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -9,30 +9,30 @@ class RevisioneRulesTest {
 
     @Test
     fun testFirstRevisionAfter4Years() {
-        val dataImm = LocalDate(2020, 6, 15)
+        val dataImm = LocalDate.of(2020, 6, 15)
         val result = RevisioneRules.calcolaProssimaRevisione(dataImm)
         
         // Prima revisione a 4 anni = giugno 2024
         assertEquals("First revision after 4 years", 2024, result.prossimaScadenza.year)
-        assertEquals("June", 6, result.prossimaScadenza.month.number)
+        assertEquals("June", 6, result.prossimaScadenza.monthValue)
         assertEquals("Last day of June", 30, result.prossimaScadenza.dayOfMonth)
     }
 
     @Test
     fun testSubsequentRevisionsEvery2Years() {
-        val dataImm = LocalDate(2018, 6, 15)
-        val ultimaRevisione = LocalDate(2022, 6, 30) // Prima revisione fatta
+        val dataImm = LocalDate.of(2018, 6, 15)
+        val ultimaRevisione = LocalDate.of(2022, 6, 30) // Prima revisione fatta
         
         val result = RevisioneRules.calcolaProssimaRevisione(dataImm, ultimaRevisione)
         
         // Revisioni successive ogni 2 anni = giugno 2024
         assertEquals("Subsequent revision every 2 years", 2024, result.prossimaScadenza.year)
-        assertEquals("June", 6, result.prossimaScadenza.month.number)
+        assertEquals("June", 6, result.prossimaScadenza.monthValue)
     }
 
     @Test
     fun testHistoricVehicleEvery2YearsAfter30() {
-        val dataImm = LocalDate(1990, 6, 15) // 34 anni fa
+        val dataImm = LocalDate.of(1990, 6, 15) // 34 anni fa
         val result = RevisioneRules.calcolaProssimaRevisione(
             dataImm, 
             isStorico = true
@@ -46,7 +46,7 @@ class RevisioneRulesTest {
 
     @Test
     fun testElectricVehicleExemption() {
-        val dataImm = LocalDate(2023, 1, 1)
+        val dataImm = LocalDate.of(2023, 1, 1)
         val result = RevisioneRules.calcolaProssimaRevisione(
             dataImm,
             isElettrico = true,
@@ -60,7 +60,7 @@ class RevisioneRulesTest {
 
     @Test
     fun testRevisioneOverdue() {
-        val dataImm = LocalDate(2015, 1, 1)
+        val dataImm = LocalDate.of(2015, 1, 1)
         val result = RevisioneRules.calcolaProssimaRevisione(dataImm)
         
         // Se scaduta, giorni negativi
@@ -75,7 +75,7 @@ class RevisioneRulesTest {
 
     @Test
     fun testRecentVehicleNoRevisionYet() {
-        val dataImm = LocalDate(2023, 6, 15)
+        val dataImm = LocalDate.of(2023, 6, 15)
         val result = RevisioneRules.calcolaProssimaRevisione(dataImm)
         
         // Prima revisione a 4 anni = 2027
@@ -85,12 +85,12 @@ class RevisioneRulesTest {
 
     @Test
     fun testExactRevisionDate() {
-        val dataImm = LocalDate(2020, 2, 29) // Anno bisestile
+        val dataImm = LocalDate.of(2020, 2, 29) // Anno bisestile
         val result = RevisioneRules.calcolaProssimaRevisione(dataImm)
         
         // 4 anni dopo = 2024-02-29 (bisestile)
         assertEquals("Leap year handling", 2024, result.prossimaScadenza.year)
-        assertEquals("February", 2, result.prossimaScadenza.month.number)
+        assertEquals("February", 2, result.prossimaScadenza.monthValue)
         assertEquals("29th day", 29, result.prossimaScadenza.dayOfMonth)
     }
 }

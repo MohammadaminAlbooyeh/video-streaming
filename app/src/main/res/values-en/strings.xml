@@ -2,9 +2,9 @@
     <string name="app_name">BolloFacile</string>
     
     <!-- AdMob -->
-    <string name="admob_app_id">ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX</string>
-    <string name="admob_banner_id">ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX</string>
-    <string name="admob_interstitial_id">ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX</string>
+    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>
     
     <!-- Home -->
     <string name="home_title">Your vehicles</string>
@@ -132,4 +132,19 @@
     <string name="delete_confirm">Delete this vehicle?</string>
     <string name="delete_confirm_text">This action cannot be undone.</string>
     <string name="delete">Delete</string>
+    <string name="back">Back</string>
+    <string name="bollo">Tax</string>
+    <string name="delay_days_fmt">Delay: %1$d days</string>
+    <string name="edit">Edit</string>
+    <string name="historic_label">Historic vehicle</string>
+    <string name="in_years_fmt">in %1$d years</string>
+    <string name="not_done">Not done</string>
+    <string name="options">Options</string>
+    <string name="payment_data">Payment details</string>
+    <string name="plate_label">Plate</string>
+    <string name="power">Power</string>
+    <string name="ravvedimento_band_fmt">Voluntary settlement band: %1$s</string>
+    <string name="stat_deadlines">Deadlines</string>
+    <string name="stat_vehicles">Vehicles</string>
+    <string name="vehicle_data">Vehicle details</string>
 </resources>

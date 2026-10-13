@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import it.bollofacile.rules.model.Alimentazione
 import it.bollofacile.rules.model.ClasseEuro
 import it.bollofacile.rules.model.Regione
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 
 @Entity(tableName = "veicoli")
 data class VeicoloEntity(

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 
 @Entity(
     tableName = "pagamenti",

@@ -1,9 +1,7 @@
 package it.bollofacile.rules.model
 
-import kotlinx.datetime.LocalDate
-import kotlinx.serialization.Serializable
+import java.time.LocalDate
 
-@Serializable
 data class Veicolo(
     val id: Long = 0,
     val targa: String? = null,
@@ -28,7 +26,6 @@ data class Veicolo(
     fun superbolloKwExcess(): Int = maxOf(0, kw - 185)
 }
 
-@Serializable
 enum class ClasseEuro(val label: String, val minYear: Int, val maxYear: Int?) {
     EURO_0("Euro 0", 0, 1992),
     EURO_1("Euro 1", 1993, 1996),
@@ -39,7 +36,6 @@ enum class ClasseEuro(val label: String, val minYear: Int, val maxYear: Int?) {
     EURO_6("Euro 6", 2015, null)
 }
 
-@Serializable
 enum class Alimentazione(val label: String, val bolloReduction: Double = 0.0) {
     BENZINA("Benzina", 0.0),
     DIESEL("Diesel", 0.0),
@@ -49,7 +45,6 @@ enum class Alimentazione(val label: String, val bolloReduction: Double = 0.0) {
     METANO("Metano", 0.75)       // 75% riduzione
 }
 
-@Serializable
 enum class Regione(val codice: String, val nome: String, val coefficiente: Double = 1.0) {
     ABRUZZO("ABR", "Abruzzo", 1.0),
     BASILICATA("BAS", "Basilicata", 1.0),
@@ -73,7 +68,6 @@ enum class Regione(val codice: String, val nome: String, val coefficiente: Doubl
     VENETO("VEN", "Veneto", 1.0)
 }
 
-@Serializable
 data class BolloResult(
     val bolloBase: Double,
     val superbollo: Double,
@@ -88,7 +82,6 @@ data class BolloResult(
     val isEsente: Boolean get() = totale == 0.0
 }
 
-@Serializable
 data class RevisioneResult(
     val prossimaScadenza: LocalDate,
     val anniProssima: Int,
@@ -96,7 +89,6 @@ data class RevisioneResult(
     val note: String
 )
 
-@Serializable
 data class SanzioneResult(
     val importoOriginale: Double,
     val giorniRitardo: Int,
