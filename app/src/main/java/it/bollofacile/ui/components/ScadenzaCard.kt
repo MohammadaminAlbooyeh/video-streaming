@@ -27,6 +27,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.DirectionsCar
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.res.stringResource
+import it.bollofacile.R
 import it.bollofacile.rules.model.Veicolo
 import it.bollofacile.util.Format
 import it.bollofacile.util.daysUntil
@@ -49,13 +53,9 @@ fun ScadenzaCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = when {
-                isBolloScaduto || isRevisioneScaduta -> MaterialTheme.colorScheme.errorContainer
-                isBolloUrgente || isRevisioneUrgente -> MaterialTheme.colorScheme.secondaryContainer
-                else -> MaterialTheme.colorScheme.surfaceContainerLow
-            }
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(20.dp),
         onClick = onClick
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -63,29 +63,44 @@ fun ScadenzaCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column {
-                    Text(
-                        text = "${veicolo.marca} ${veicolo.modello}",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    veicolo.targa?.let {
-                        Text(text = it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DirectionsCar,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    Column {
+                        Text(
+                            text = "${veicolo.marca} ${veicolo.modello}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        veicolo.targa?.let {
+                            Text(text = it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                 }
                 if (isBolloScaduto || isRevisioneScaduta) {
-                    Text(
-                        text = "SCADUTO",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onErrorContainer
+                    StatusPill(
+                        text = stringResource(R.string.expired),
+                        container = MaterialTheme.colorScheme.errorContainer,
+                        content = MaterialTheme.colorScheme.onErrorContainer
                     )
                 } else if (isBolloUrgente || isRevisioneUrgente) {
-                    Text(
-                        text = "URGENTE",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    StatusPill(
+                        text = stringResource(R.string.urgent),
+                        container = MaterialTheme.colorScheme.tertiaryContainer,
+                        content = MaterialTheme.colorScheme.onTertiaryContainer
                     )
                 }
             }
@@ -116,7 +131,7 @@ fun ScadenzaCard(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = if (isBolloScaduto) "Scaduto ${-giorniBollo} giorni fa" else "${giorniBollo} giorni",
+                        text = if (isBolloScaduto) "${-giorniBollo} " + stringResource(R.string.days_ago) else "$giorniBollo " + stringResource(R.string.days_left),
                         style = MaterialTheme.typography.bodySmall,
                         color = when {
                             isBolloScaduto -> MaterialTheme.colorScheme.error
@@ -154,7 +169,7 @@ fun ScadenzaCard(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = if (isRevisioneScaduta) "Scaduta ${-giorniRevisione} giorni fa" else "${giorniRevisione} giorni",
+                        text = if (isRevisioneScaduta) "${-giorniRevisione} " + stringResource(R.string.days_ago) else "$giorniRevisione " + stringResource(R.string.days_left),
                         style = MaterialTheme.typography.bodySmall,
                         color = when {
                             isRevisioneScaduta -> MaterialTheme.colorScheme.error
@@ -165,5 +180,21 @@ fun ScadenzaCard(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun StatusPill(text: String, container: Color, content: Color) {
+    Box(
+        modifier = Modifier
+            .background(container, RoundedCornerShape(50))
+            .padding(horizontal = 10.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+            color = content
+        )
     }
 }
