@@ -35,6 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.res.stringResource
+import it.bollofacile.R
 import it.bollofacile.ui.components.Panel
 
 @Composable
@@ -59,17 +61,17 @@ fun ProScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "BolloFacile Pro",
+                text = stringResource(R.string.pro_title),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
             IconButton(onClick = onNavigateBack) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "Chiudi")
+                Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(R.string.close))
             }
         }
 
         if (isPro) {
-            Panel(title = "Grazie per il supporto!") {
+            Panel(title = stringResource(R.string.pro_thanks)) {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
@@ -78,17 +80,17 @@ fun ProScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Text(
-                        text = "Hai sbloccato tutte le funzionalità Pro",
+                        text = stringResource(R.string.pro_unlocked_msg),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "• Storico pagamenti illimitato\n• Export dati\n• Nessuna pubblicità\n• Supporto prioritario\n• Aggiornamenti tariffe a vita",
+                        text = stringResource(R.string.pro_benefits_list),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
         } else {
-            Panel(title = "Sblocca la versione Pro") {
+            Panel(title = stringResource(R.string.unlock_pro_panel)) {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Icon(
                         imageVector = Icons.Default.Star,
@@ -97,23 +99,23 @@ fun ProScreen(
                         tint = MaterialTheme.colorScheme.tertiary
                     )
                     Text(
-                        text = "Funzionalità Pro",
+                        text = stringResource(R.string.pro_features_slogan),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold
                     )
 
-                    ProFeatureRow(Icons.Default.History, "Storico pagamenti", "Salva e visualizza tutti i pagamenti bollo e revisione")
-                    ProFeatureRow(Icons.Default.FileDownload, "Export dati", "Backup completo in CSV")
-                    ProFeatureRow(Icons.Default.Block, "Nessuna pubblicità", "Esperienza pulita senza banner o interstitial")
-                    ProFeatureRow(Icons.Default.SupportAgent, "Supporto prioritario", "Risposte rapide alle tue domande")
-                    ProFeatureRow(Icons.Default.Update, "Aggiornamenti a vita", "Tariffe sempre aggiornate ogni anno")
+                    ProFeatureRow(Icons.Default.History, stringResource(R.string.pro_feature_history), stringResource(R.string.pro_feature_history_desc))
+                    ProFeatureRow(Icons.Default.FileDownload, stringResource(R.string.pro_feature_export), stringResource(R.string.pro_feature_export_desc))
+                    ProFeatureRow(Icons.Default.Block, stringResource(R.string.pro_feature_no_ads), stringResource(R.string.pro_feature_no_ads_desc))
+                    ProFeatureRow(Icons.Default.SupportAgent, stringResource(R.string.pro_feature_support), stringResource(R.string.pro_feature_support_desc))
+                    ProFeatureRow(Icons.Default.Update, stringResource(R.string.pro_feature_updates), stringResource(R.string.pro_feature_updates_desc))
 
                     Button(
                         onClick = { activity?.let { viewModel.buyPro(it) } },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = "Acquista Pro - ${proPrice ?: "…"} (una tantum)",
+                            text = stringResource(R.string.buy_pro_fmt, proPrice ?: "…"),
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -122,14 +124,14 @@ fun ProScreen(
                         onClick = { viewModel.restorePurchases() },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = "Ripristina acquisti")
+                        Text(text = stringResource(R.string.restore_purchases))
                     }
                 }
             }
 
-            Panel(title = "Perché Pro?") {
+            Panel(title = stringResource(R.string.why_pro)) {
                 Text(
-                    text = "BolloFacile è sviluppato da un piccolo team indipendente. Il tuo acquisto ci aiuta a mantenere l'app aggiornata con le nuove tariffe annuali, aggiungere nuove funzionalità e garantire un'esperienza senza pubblicità. Grazie per il tuo supporto!",
+                    text = stringResource(R.string.why_pro_text),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

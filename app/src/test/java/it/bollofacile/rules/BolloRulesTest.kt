@@ -57,7 +57,7 @@ class BolloRulesTest {
         )
         val result = BolloRules2026.calcolaBollo(veicoloElettrico)
         
-        // Lombardia: esenzione 5 anni per elettriche
+        // Lombardia: 5-year exemption for electric vehicles
         assertTrue("Electric vehicle in Lombardia (2023) should have reduction", result.riduzioneAlimentazione > 0)
     }
 
@@ -66,7 +66,7 @@ class BolloRulesTest {
         val veicoloIbrido = veicoloStandard.copy(alimentazione = Alimentazione.IBRIDA)
         val result = BolloRules2026.calcolaBollo(veicoloIbrido)
         
-        // Lombardia: 50% riduzione per ibride
+        // Lombardia: 50% reduction for hybrids
         assertTrue("Hybrid should have 50% reduction in Lombardia", result.riduzioneAlimentazione > 0)
         val expectedReduction = result.bolloBase * 0.5
         assertEquals("50% reduction", expectedReduction, result.riduzioneAlimentazione, 0.01)
@@ -77,7 +77,7 @@ class BolloRulesTest {
         val veicoloGpl = veicoloStandard.copy(alimentazione = Alimentazione.GPL)
         val result = BolloRules2026.calcolaBollo(veicoloGpl)
         
-        // 75% riduzione nazionale per GPL/Metano
+        // 75% national reduction for LPG/CNG
         assertTrue("GPL should have 75% reduction", result.riduzioneAlimentazione > 0)
         val expectedReduction = result.bolloBase * 0.75
         assertEquals("75% reduction", expectedReduction, result.riduzioneAlimentazione, 0.01)
@@ -99,7 +99,7 @@ class BolloRulesTest {
     fun testScadenzaCalculation() {
         val result = BolloRules2026.calcolaBollo(veicoloStandard)
         
-        // Scadenza dovrebbe essere fine mese di immatricolazione (giugno)
+        // Due date should be the end of the registration month (June)
         assertEquals("Scadenza should be end of June", 6, result.scadenza.monthValue)
         assertEquals("Scadenza should be last day of month", 30, result.scadenza.dayOfMonth)
     }

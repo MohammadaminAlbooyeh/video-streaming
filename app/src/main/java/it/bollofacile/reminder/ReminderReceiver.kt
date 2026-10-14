@@ -26,8 +26,8 @@ class ReminderReceiver : BroadcastReceiver() {
             
             if (!notificationsEnabled) return@launch
 
-            // Qui recupereremmo i dettagli del veicolo dal repository
-            // Per ora mostriamo notifica generica
+            // Here we would fetch the vehicle details from the repository
+            // For now we show a generic notification
             NotificationHelper.showReminderNotification(
                 context = context,
                 veicoloId = veicoloId,

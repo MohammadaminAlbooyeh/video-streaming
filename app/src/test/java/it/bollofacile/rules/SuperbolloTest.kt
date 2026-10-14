@@ -9,7 +9,7 @@ class SuperbolloTest {
 
     @Test
     fun testSuperbolloThreshold() {
-        // Esattamente 185 kW = no superbollo
+        // Exactly 185 kW = no superbollo
         val veicolo185 = Veicolo(
             marca = "Test", modello = "Test", kw = 185, cv = 251,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.BENZINA,
@@ -48,7 +48,7 @@ class SuperbolloTest {
 
     @Test
     fun testSuperbolloWithReductions() {
-        // Superbollo non viene ridotto da alimentazione o classe Euro
+        // Superbollo is not reduced by fuel type or Euro class
         val veicoloPotenteElettrico = Veicolo(
             marca = "Test", modello = "Test", kw = 200, cv = 272,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.ELETTRICA,
@@ -56,7 +56,7 @@ class SuperbolloTest {
         )
         val result = BolloRules2026.calcolaBollo(veicoloPotenteElettrico)
         
-        // Superbollo intero (300€) + bollo base ridotto
+        // Full superbollo (300€) + reduced base bollo
         assertEquals("Superbollo should be full 300€", 300.0, result.superbollo, 0.01)
         assertTrue("Base should be reduced for electric", result.riduzioneAlimentazione > 0)
         assertTrue("Total should include full superbollo", result.totale >= result.superbollo)

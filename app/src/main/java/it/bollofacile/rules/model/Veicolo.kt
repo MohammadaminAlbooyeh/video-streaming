@@ -39,10 +39,10 @@ enum class ClasseEuro(val label: String, val minYear: Int, val maxYear: Int?) {
 enum class Alimentazione(val label: String, val bolloReduction: Double = 0.0) {
     BENZINA("Benzina", 0.0),
     DIESEL("Diesel", 0.0),
-    IBRIDA("Ibrida", 0.5),      // 50% riduzione in molte regioni
-    ELETTRICA("Elettrica", 1.0), // Esenzione totale (5 anni poi regionale)
-    GPL("GPL", 0.75),            // 75% riduzione
-    METANO("Metano", 0.75)       // 75% riduzione
+    IBRIDA("Ibrida", 0.5),      // 50% reduction in many regions
+    ELETTRICA("Elettrica", 1.0), // Full exemption (5 years, then regional)
+    GPL("GPL", 0.75),            // 75% reduction
+    METANO("Metano", 0.75)       // 75% reduction
 }
 
 enum class Regione(val codice: String, val nome: String, val coefficiente: Double = 1.0) {

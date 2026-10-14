@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="it.bollofacile">
 
-    <!-- Permessi necessari -->
+    <!-- Required permissions -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
@@ -26,13 +26,13 @@
         android:theme="@style/Theme.BolloFacile"
         tools:targetApi="31">
 
-        <!-- AdMob App ID (sostituire con il tuo) -->
+        <!-- AdMob App ID (replace with your own) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id"
             tools:replace="android:value" />
 
-        <!-- Activity principale -->
+        <!-- Main activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Receiver per promemoria e boot -->
+        <!-- Receiver for reminders and boot -->
         <receiver
             android:name=".reminder.ReminderReceiver"
             android:exported="false" />
@@ -59,7 +59,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- Provider per FileProvider se serve export -->
+        <!-- Provider for FileProvider if export is needed -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -72,7 +72,7 @@
 
     </application>
 
-    <!-- Query per Play Billing -->
+    <!-- Queries for Play Billing -->
     <queries>
         <package android:name="com.android.vending" />
         <intent>

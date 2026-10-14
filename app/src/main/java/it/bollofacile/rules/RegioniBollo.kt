@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 object RegioniBollo {
 
-    // Esenzioni e riduzioni regionali specifiche (2026)
+    // Region-specific exemptions and reductions (2026)
     private val REGIONAL_RULES = mapOf(
         Regione.LOMBARDIA to RegionalRule(
             esenzioniIbride = true,
@@ -65,7 +65,7 @@ object RegioniBollo {
             riduzioneIbrida = 0.0,
             note = "Sicilia: esenzione 3 anni solo elettriche"
         )
-        // Altre regioni: regole nazionali di default
+        // Other regions: national rules by default
     )
 
     data class RegionalRule(
@@ -88,7 +88,7 @@ object RegioniBollo {
                 if (rule != null && rule.esenzioniIbride) base * rule.riduzioneIbrida else 0.0
             }
             Alimentazione.GPL, Alimentazione.METANO -> {
-                // Riduzione nazionale 75% per GPL/Metano
+                // National 75% reduction for LPG/CNG
                 base * 0.75
             }
             else -> 0.0

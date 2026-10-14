@@ -26,12 +26,12 @@ class SanzioniRulesTest {
     @Test
     fun testPenaltyWithin14Days() {
         val scadenza = LocalDate.of(2024, 6, 30)
-        val pagamento = LocalDate.of(2024, 7, 10) // 10 giorni dopo
+        val pagamento = LocalDate.of(2024, 7, 10) // 10 days later
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
         assertEquals("10 days delay", 10, result.giorniRitardo)
-        // Sanzione base: 30% di 150 = 45€ (min 25€)
+        // Base penalty: 30% of 150 = 45€ (min 25€)
         assertEquals("Base penalty 30%", 45.0, result.sanzioneBase, 0.01)
         // Ravvedimento 1/10 = 4.5€
         assertEquals("Ravvedimento 1/10", 4.5, result.ravvedimentoOperoso, 0.01)
@@ -42,7 +42,7 @@ class SanzioniRulesTest {
     @Test
     fun testPenaltyWithin30Days() {
         val scadenza = LocalDate.of(2024, 6, 30)
-        val pagamento = LocalDate.of(2024, 7, 20) // 20 giorni dopo
+        val pagamento = LocalDate.of(2024, 7, 20) // 20 days later
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -55,7 +55,7 @@ class SanzioniRulesTest {
     @Test
     fun testPenaltyWithin90Days() {
         val scadenza = LocalDate.of(2024, 6, 30)
-        val pagamento = LocalDate.of(2024, 9, 15) // ~77 giorni dopo
+        val pagamento = LocalDate.of(2024, 9, 15) // ~77 days later
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -68,7 +68,7 @@ class SanzioniRulesTest {
     @Test
     fun testPenaltyWithin1Year() {
         val scadenza = LocalDate.of(2024, 6, 30)
-        val pagamento = LocalDate.of(2025, 3, 15) // ~258 giorni dopo
+        val pagamento = LocalDate.of(2025, 3, 15) // ~258 days later
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -81,7 +81,7 @@ class SanzioniRulesTest {
     @Test
     fun testPenaltyWithin2Years() {
         val scadenza = LocalDate.of(2024, 6, 30)
-        val pagamento = LocalDate.of(2026, 1, 15) // ~564 giorni dopo
+        val pagamento = LocalDate.of(2026, 1, 15) // ~564 days later
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
@@ -94,25 +94,25 @@ class SanzioniRulesTest {
     @Test
     fun testPenaltyOver2Years() {
         val scadenza = LocalDate.of(2022, 6, 30)
-        val pagamento = LocalDate.of(2025, 1, 15) // ~929 giorni dopo
+        val pagamento = LocalDate.of(2025, 1, 15) // ~929 days later
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
         assertTrue(">2 years delay", result.giorniRitardo > 730)
-        // Nessun ravvedimento = sanzione piena (45€)
+        // No ravvedimento = full penalty (45€)
         assertEquals("Full penalty", 45.0, result.ravvedimentoOperoso, 0.01)
         assertEquals("Fascia oltre 2 anni", "Oltre 2 anni (sanzione piena)", result.fasciaRavvedimento)
     }
 
     @Test
     fun testMinimumPenalty() {
-        // Importo molto basso: sanzione minima €25
+        // Very low amount: minimum penalty €25
         val scadenza = LocalDate.of(2024, 6, 30)
         val pagamento = LocalDate.of(2024, 7, 10)
         
         val result = SanzioniRules.calcolaSanzione(10.0, scadenza, pagamento)
         
-        // 30% di 10 = 3€, ma minimo €25
+        // 30% of 10 = 3€, but minimum €25
         assertEquals("Minimum penalty €25", 25.0, result.sanzioneBase, 0.01)
     }
 
@@ -131,11 +131,11 @@ class SanzioniRulesTest {
     @Test
     fun testInterestCalculation() {
         val scadenza = LocalDate.of(2024, 6, 30)
-        val pagamento = LocalDate.of(2024, 7, 30) // 30 giorni dopo
+        val pagamento = LocalDate.of(2024, 7, 30) // 30 days later
         
         val result = SanzioniRules.calcolaSanzione(150.0, scadenza, pagamento)
         
-        // Interessi: 150 * 2.5% / 365 * 30 ≈ 0.31€
+        // Interest: 150 * 2.5% / 365 * 30 ≈ 0.31€
         val expectedInterest = 150.0 * 0.025 / 365 * 30
         assertEquals("Legal interest calculation", expectedInterest, result.interessi, 0.01)
     }

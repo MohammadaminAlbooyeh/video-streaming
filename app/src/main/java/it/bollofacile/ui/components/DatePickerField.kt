@@ -1,6 +1,8 @@
 package it.bollofacile.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.res.stringResource
+import it.bollofacile.R
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
@@ -77,10 +79,10 @@ fun DatePickerField(
                         onDateSelected(LocalDate.ofEpochDay(TimeUnit.MILLISECONDS.toDays(millis)))
                     }
                     showDialog = false
-                }) { Text("OK") }
+                }) { Text(stringResource(R.string.ok)) }
             },
             dismissButton = {
-                TextButton(onClick = { showDialog = false }) { Text("Annulla") }
+                TextButton(onClick = { showDialog = false }) { Text(stringResource(R.string.cancel)) }
             }
         ) {
             DatePicker(state = state)

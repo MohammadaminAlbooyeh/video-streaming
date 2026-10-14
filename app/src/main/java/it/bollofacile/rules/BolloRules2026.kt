@@ -10,23 +10,23 @@ import java.math.RoundingMode
 
 object BolloRules2026 {
 
-    // Tariffe base per kW (valori 2026 - aggiornare annualmente)
+    // Base rates per kW (2026 values - update annually)
     private val TARIFFE_KW = mapOf(
         0 to 2.58,
         1 to 2.58,
-        // ... valori intermedi
+        // ... intermediate values
         100 to 4.50,
         185 to 4.50,
-        186 to 6.50,  // Superbollo scatta qui
+        186 to 6.50,  // Superbollo kicks in here
         200 to 6.50
     )
 
-    // Superbollo: 20€ per ogni kW oltre 185
+    // Superbollo: 20€ for each kW above 185
     const val SUPERBOLLO_PER_KW = 20.0
     const val SOGLIA_SUPERBOLLO_KW = 185
 
     fun calcolaBollo(veicolo: Veicolo, regione: Regione = veicolo.regione): BolloResult {
-        // Veicoli storici (30+ anni) esenti
+        // Historic vehicles (30+ years) are exempt
         val eta = YearMonth.from(veicolo.dataImmatricolazione).until(YearMonth.from(LocalDate.now()), java.time.temporal.ChronoUnit.YEARS).toInt()
         if (veicolo.isStorico || eta >= 30) {
             return BolloResult(
@@ -45,7 +45,7 @@ object BolloRules2026 {
         val superbollo = calcolaSuperbollo(veicolo)
         val riduzioneAlim = RegioniBollo.getRiduzioneAlimentazione(regione, veicolo, bolloBase)
 
-        // Il superbollo non è soggetto a riduzioni: si somma per intero al bollo ridotto
+        // The superbollo is not subject to reductions: it is added in full to the reduced bollo
         val totale = (bolloBase - riduzioneAlim).coerceAtLeast(0.0) + superbollo
         val scadenza = calcolaScadenzaBollo(veicolo.dataImmatricolazione)
 
@@ -78,7 +78,7 @@ object BolloRules2026 {
     }
 
     private fun calcolaScadenzaBollo(dataImm: LocalDate): LocalDate {
-        // Scadenza: ultimo giorno del mese di immatricolazione
+        // Due date: last day of the registration month
         val annoCorrente = LocalDate.now().year
         val meseImm = dataImm.month
         return LocalDate.of(annoCorrente, meseImm, meseImm.maxDaysInMonth(annoCorrente))

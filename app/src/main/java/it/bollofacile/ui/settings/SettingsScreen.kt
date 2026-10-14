@@ -1,6 +1,5 @@
 package it.bollofacile.ui.settings
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.IconButton
@@ -14,24 +13,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,7 +37,6 @@ import it.bollofacile.data.prefs.SettingsStore
 import it.bollofacile.rules.model.Regione
 import it.bollofacile.ui.components.DropdownField
 import it.bollofacile.ui.components.Panel
-import it.bollofacile.ui.theme.Theme
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.first
 import androidx.compose.ui.platform.LocalContext
@@ -48,7 +44,8 @@ import javax.inject.Inject
 
 @Composable
 fun SettingsScreen(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateToPro: () -> Unit = {}
 ) {
     val viewModel = hiltViewModel<SettingsViewModel>()
     val theme by viewModel.settingsStore.theme.collectAsStateWithLifecycle(initialValue = SettingsStore.THEME_SYSTEM)
@@ -57,178 +54,175 @@ fun SettingsScreen(
     val notificationsEnabled by viewModel.settingsStore.notificationsEnabled.collectAsStateWithLifecycle(initialValue = true)
     val isPro by viewModel.settingsStore.isProEnabled.collectAsStateWithLifecycle(initialValue = false)
     val activity = LocalContext.current as? android.app.Activity
-    
-    Theme {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(text = "Impostazioni", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = "Chiudi")
+                Text(text = stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                IconButton(onClick = onNavigateBack) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = stringResource(R.string.close))
+                }
+            }
+
+            // Theme
+            Panel(title = stringResource(R.string.appearance)) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(text = stringResource(R.string.theme))
+                            Text(text = stringResource(R.string.theme_choose), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Text(text = when (theme) {
+                            SettingsStore.THEME_LIGHT -> stringResource(R.string.theme_light)
+                            SettingsStore.THEME_DARK -> stringResource(R.string.theme_dark)
+                            else -> stringResource(R.string.theme_system)
+                        })
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        ThemeOption(modifier = Modifier.weight(1f), text = stringResource(R.string.theme_system), selected = theme == SettingsStore.THEME_SYSTEM, onClick = { viewModel.setTheme(SettingsStore.THEME_SYSTEM) })
+                        ThemeOption(modifier = Modifier.weight(1f), text = stringResource(R.string.theme_light), selected = theme == SettingsStore.THEME_LIGHT, onClick = { viewModel.setTheme(SettingsStore.THEME_LIGHT) })
+                        ThemeOption(modifier = Modifier.weight(1f), text = stringResource(R.string.theme_dark), selected = theme == SettingsStore.THEME_DARK, onClick = { viewModel.setTheme(SettingsStore.THEME_DARK) })
                     }
                 }
-                
-                // Tema
-                Panel(title = "Aspetto") {
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                Text(text = "Tema")
-                                Text(text = "Scegli l'aspetto dell'app", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            }
-                            Text(text = when (theme) {
-                                0 -> "Sistema"
-                                1 -> "Chiaro"
-                                2 -> "Scuro"
-                                else -> "Sistema"
-                            })
+            }
+
+            // Default region
+            Panel(title = stringResource(R.string.default_region)) {
+                DropdownField(
+                    label = stringResource(R.string.region),
+                    options = Regione.values().map { it.nome },
+                    selectedOption = Regione.values().first { it.codice == regioneDefault }.nome,
+                    onOptionSelected = { nome ->
+                        val regione = Regione.values().first { it.nome == nome }
+                        viewModel.setRegioneDefault(regione.codice)
+                    }
+                )
+            }
+
+            // Reminders
+            Panel(title = stringResource(R.string.reminders)) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(text = stringResource(R.string.reminder_notifications))
+                            Text(text = stringResource(R.string.reminder_notifications_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
-                        
-                        // Simplified theme selection
+                        Switch(
+                            checked = notificationsEnabled,
+                            onCheckedChange = { viewModel.setNotificationsEnabled(it) }
+                        )
+                    }
+
+                    if (notificationsEnabled) {
+                        Text(text = stringResource(R.string.reminder_days) + ":", style = MaterialTheme.typography.bodyMedium)
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            ThemeOption(modifier = Modifier.weight(1f), text = "Sistema", selected = theme == 0, onClick = { viewModel.setTheme(0) })
-                            ThemeOption(modifier = Modifier.weight(1f), text = "Chiaro", selected = theme == 1, onClick = { viewModel.setTheme(1) })
-                            ThemeOption(modifier = Modifier.weight(1f), text = "Scuro", selected = theme == 2, onClick = { viewModel.setTheme(2) })
-                        }
-                    }
-                }
-                
-                // Regione default
-                Panel(title = "Regione di default") {
-                    DropdownField(
-                        label = "Regione",
-                        options = Regione.values().map { it.nome },
-                        selectedOption = Regione.values().first { it.codice == regioneDefault }.nome,
-                        onOptionSelected = { nome -> 
-                            val regione = Regione.values().first { it.nome == nome }
-                            viewModel.setRegioneDefault(regione.codice)
-                        }
-                    )
-                }
-                
-                // Promemoria
-                Panel(title = "Promemoria") {
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                Text(text = "Notifiche promemoria")
-                                Text(text = "Ricevi avvisi per scadenze bollo e revisione", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            }
-                            Switch(
-                                checked = notificationsEnabled,
-                                onCheckedChange = { viewModel.setNotificationsEnabled(it) }
-                            )
-                        }
-                        
-                        if (notificationsEnabled) {
-                            Text(text = "Giorni prima della scadenza:", style = MaterialTheme.typography.bodyMedium)
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                listOf(30, 15, 7, 3, 1).forEach { day ->
-                                    val isSelected = day in reminderDays
-                                    FilterChip(
-                                        selected = isSelected,
-                                        onClick = { 
-                                            val newDays = if (isSelected) reminderDays.filter { it != day } else reminderDays + day
-                                            viewModel.setReminderDays(newDays.sorted())
-                                        },
-                                        label = { Text(text = "$day gg") }
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                // Pro status
-                Panel(title = "Versione Pro") {
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        if (isPro) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column {
-                                    Text(text = "Pro attivo", fontWeight = FontWeight.Bold)
-                                    Text(text = "Tutte le funzionalità sbloccate", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
-                                }
-                                Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Pro", tint = MaterialTheme.colorScheme.primary)
-                            }
-                        } else {
-                            Button(onClick = { /* navigate to pro screen */ }, modifier = Modifier.fillMaxWidth()) {
-                                Text(text = "Sblocca versione Pro")
-                            }
-                        }
-                        
-                        Button(onClick = { /* restore purchases */ }, modifier = Modifier.fillMaxWidth()) {
-                            Text(text = "Ripristina acquisti")
-                        }
-                    }
-                }
-                
-                // Export dati (Pro)
-                Panel(title = "Dati") {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            text = if (isPro) "Esporta veicoli e pagamenti in formato CSV" else "L'export dati è una funzionalità Pro",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Button(
-                            onClick = { activity?.let { viewModel.exportCsv(it) } },
-                            enabled = isPro && activity != null,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = "Esporta dati (CSV)")
-                        }
-                    }
-                }
-
-                // Info
-                Panel(title = "Informazioni") {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(text = "Versione")
-                            Text(text = "1.0.0")
-                        }
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(text = "Privacy Policy")
-                            TextButton(onClick = { /* open privacy */ }) {
-                                Text(text = "Leggi")
-                            }
-                        }
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(text = "Open Source Licenses")
-                            TextButton(onClick = { /* open licenses */ }) {
-                                Text(text = "Visualizza")
+                            listOf(30, 15, 7, 3, 1).forEach { day ->
+                                val isSelected = day in reminderDays
+                                FilterChip(
+                                    selected = isSelected,
+                                    onClick = {
+                                        val newDays = if (isSelected) reminderDays.filter { it != day } else reminderDays + day
+                                        viewModel.setReminderDays(newDays.sorted())
+                                    },
+                                    label = { Text(text = stringResource(R.string.days_short_fmt, day)) }
+                                )
                             }
                         }
                     }
                 }
             }
+
+            // Pro status
+            Panel(title = stringResource(R.string.pro_version)) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (isPro) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Text(text = stringResource(R.string.pro_active), fontWeight = FontWeight.Bold)
+                                Text(text = stringResource(R.string.pro_all_unlocked), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                            }
+                            Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Pro", tint = MaterialTheme.colorScheme.primary)
+                        }
+                    } else {
+                        Button(onClick = onNavigateToPro, modifier = Modifier.fillMaxWidth()) {
+                            Text(text = stringResource(R.string.unlock_pro))
+                        }
+                    }
+                }
+            }
+
+            // Data export (Pro)
+            Panel(title = stringResource(R.string.data_section)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = if (isPro) stringResource(R.string.export_desc_pro) else stringResource(R.string.export_pro_only),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Button(
+                        onClick = { activity?.let { viewModel.exportCsv(it) } },
+                        enabled = isPro && activity != null,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = stringResource(R.string.export_csv))
+                    }
+                }
+            }
+
+            // About
+            Panel(title = stringResource(R.string.about)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(text = stringResource(R.string.version))
+                        Text(text = "1.0.0")
+                    }
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = stringResource(R.string.privacy_policy))
+                        TextButton(onClick = { activity?.let { openUrl(it, PRIVACY_POLICY_URL) } }) {
+                            Text(text = stringResource(R.string.read))
+                        }
+                    }
+                }
+            }
         }
+    }
+}
+
+private const val PRIVACY_POLICY_URL = "https://github.com/MohammadaminAlbooyeh/bollo-facile/blob/master/PRIVACY_POLICY.md"
+
+private fun openUrl(activity: android.app.Activity, url: String) {
+    runCatching {
+        activity.startActivity(
+            android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
+        )
     }
 }
 
@@ -266,7 +260,7 @@ class SettingsViewModel @Inject constructor(
             activity,
             file,
             "${activity.packageName}.fileprovider",
-            "Export dati BolloFacile"
+            activity.getString(it.bollofacile.R.string.export_subject)
         )
     }
 }

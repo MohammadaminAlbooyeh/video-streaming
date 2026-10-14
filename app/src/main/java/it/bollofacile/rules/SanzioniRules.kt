@@ -9,23 +9,23 @@ import java.math.RoundingMode
 
 object SanzioniRules {
 
-    // Ravvedimento operoso (Art. 13 D.Lgs. 472/1997)
-    // Fasce di riduzione sanzione in base ai giorni di ritardo:
-    // - Entro 14 giorni: 1/10 del minimo (0.1%)
-    // - Entro 30 giorni: 1/8 del minimo (1.5%)
-    // - Entro 90 giorni: 1/7 del minimo (1.67%)
-    // - Entro 1 anno: 1/6 del minimo (2.5%)
-    // - Entro 2 anni: 1/5 del minimo (3%)
-    // Oltre 2 anni: sanzione piena (30%) + interessi
+    // Ravvedimento operoso (voluntary correction, Art. 13 D.Lgs. 472/1997)
+    // Penalty reduction brackets based on days of delay:
+    // - Within 14 days: 1/10 of the minimum (0.1%)
+    // - Within 30 days: 1/8 of the minimum (1.5%)
+    // - Within 90 days: 1/7 of the minimum (1.67%)
+    // - Within 1 year: 1/6 of the minimum (2.5%)
+    // - Within 2 years: 1/5 of the minimum (3%)
+    // Beyond 2 years: full penalty (30%) + interest
 
-    // Sanzione base: 30% dell'importo dovuto (min €25, max importo dovuto)
+    // Base penalty: 30% of the amount due (min €25, max the amount due)
     const val SANZIONE_PERCENTUALE = 0.30
     const val SANZIONE_MINIMA = 25.0
     
-    // Interessi legali 2026 (aggiornare annualmente)
+    // Legal interest rate 2026 (update annually)
     const val INTERESSE_LEGALE_ANNUO = 0.025 // 2.5%
 
-    // Fasce ravvedimento operoso
+    // Ravvedimento operoso brackets
     private val FASCE_RAVVEDIMENTO = listOf(
         FasciaRavvedimento(14, 0.10, "Entro 14 giorni (1/10)"),
         FasciaRavvedimento(30, 0.125, "Entro 30 giorni (1/8)"),
@@ -60,10 +60,10 @@ object SanzioniRules {
             )
         }
 
-        // Sanzione base (30% con minimo €25)
+        // Base penalty (30% with €25 minimum)
         val sanzioneBase = (importoBollo * SANZIONE_PERCENTUALE).coerceAtLeast(SANZIONE_MINIMA)
         
-        // Interessi legali (giornalieri)
+        // Legal interest (daily)
         val interessiGiornalieri = importoBollo * INTERESSE_LEGALE_ANNUO / 365
         val interessi = interessiGiornalieri * giorniRitardo
         
@@ -72,7 +72,7 @@ object SanzioniRules {
         val ravvedimento = if (fascia != null) {
             sanzioneBase * fascia.riduzione
         } else {
-            sanzioneBase // Nessuna riduzione oltre 2 anni
+            sanzioneBase // No reduction beyond 2 years
         }
         
         val fasciaDesc = fascia?.descrizione ?: "Oltre 2 anni (sanzione piena)"

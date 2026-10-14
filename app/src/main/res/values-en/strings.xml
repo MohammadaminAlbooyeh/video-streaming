@@ -147,4 +147,26 @@
     <string name="stat_deadlines">Deadlines</string>
     <string name="stat_vehicles">Vehicles</string>
     <string name="vehicle_data">Vehicle details</string>
+
+    <!-- Settings (extra) -->
+    <string name="close">Close</string>
+    <string name="ok">OK</string>
+    <string name="theme_choose">Choose the app\'s appearance</string>
+    <string name="reminder_notifications_desc">Get alerts for bollo and inspection due dates</string>
+    <string name="days_short_fmt">%1$d d</string>
+    <string name="pro_all_unlocked">All features unlocked</string>
+    <string name="data_section">Data</string>
+    <string name="export_desc_pro">Export vehicles and payments as CSV</string>
+    <string name="export_pro_only">Data export is a Pro feature</string>
+    <string name="export_csv">Export data (CSV)</string>
+    <string name="about">About</string>
+    <string name="read">Read</string>
+    <string name="view">View</string>
+    <string name="export_subject">BolloFacile data export</string>
+
+    <!-- Pro (extra) -->
+    <string name="pro_unlocked_msg">You have unlocked all Pro features</string>
+    <string name="pro_benefits_list">\u2022 Unlimited payment history\n\u2022 Data export\n\u2022 No ads\n\u2022 Priority support\n\u2022 Lifetime rate updates</string>
+    <string name="unlock_pro_panel">Unlock the Pro version</string>
+    <string name="buy_pro_fmt">Buy Pro - %1$s (one-time)</string>
 </resources>

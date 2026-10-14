@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BolloFacile</string>
     
-    <!-- AdMob (sostituire con i tuoi ID) -->
+    <!-- AdMob (replace with your own IDs) -->
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="admob_banner_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="admob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>
@@ -147,4 +147,26 @@
     <string name="stat_deadlines">Scadenze</string>
     <string name="stat_vehicles">Veicoli</string>
     <string name="vehicle_data">Dati veicolo</string>
+
+    <!-- Settings (extra) -->
+    <string name="close">Chiudi</string>
+    <string name="ok">OK</string>
+    <string name="theme_choose">Scegli l\'aspetto dell\'app</string>
+    <string name="reminder_notifications_desc">Ricevi avvisi per scadenze bollo e revisione</string>
+    <string name="days_short_fmt">%1$d gg</string>
+    <string name="pro_all_unlocked">Tutte le funzionalità sbloccate</string>
+    <string name="data_section">Dati</string>
+    <string name="export_desc_pro">Esporta veicoli e pagamenti in formato CSV</string>
+    <string name="export_pro_only">L\'export dati è una funzionalità Pro</string>
+    <string name="export_csv">Esporta dati (CSV)</string>
+    <string name="about">Informazioni</string>
+    <string name="read">Leggi</string>
+    <string name="view">Visualizza</string>
+    <string name="export_subject">Export dati BolloFacile</string>
+
+    <!-- Pro (extra) -->
+    <string name="pro_unlocked_msg">Hai sbloccato tutte le funzionalità Pro</string>
+    <string name="pro_benefits_list">• Storico pagamenti illimitato\n• Export dati\n• Nessuna pubblicità\n• Supporto prioritario\n• Aggiornamenti tariffe a vita</string>
+    <string name="unlock_pro_panel">Sblocca la versione Pro</string>
+    <string name="buy_pro_fmt">Acquista Pro - %1$s (una tantum)</string>
 </resources>

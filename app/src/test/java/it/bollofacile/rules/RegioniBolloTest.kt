@@ -16,7 +16,7 @@ class RegioniBolloTest {
         )
         val result = BolloRules2026.calcolaBollo(veicoloElettricoRecente)
         
-        // Lombardia: esenzione 5 anni per elettriche
+        // Lombardia: 5-year exemption for electric vehicles
         assertTrue("Electric 2023 in Lombardia should be exempt", result.isEsente)
     }
 
@@ -29,7 +29,7 @@ class RegioniBolloTest {
         )
         val result = BolloRules2026.calcolaBollo(veicoloElettricoVecchio)
         
-        // Più di 5 anni = non esente
+        // More than 5 years = not exempt
         assertFalse("Electric 2015 in Lombardia should not be exempt", result.isEsente)
     }
 
@@ -42,7 +42,7 @@ class RegioniBolloTest {
         )
         val result = BolloRules2026.calcolaBollo(veicoloIbrido)
         
-        // Lombardia: 50% riduzione per ibride
+        // Lombardia: 50% reduction for hybrids
         val expectedReduction = result.bolloBase * 0.5
         assertEquals("50% hybrid reduction in Lombardia", expectedReduction, result.riduzioneAlimentazione, 0.01)
     }
@@ -56,7 +56,7 @@ class RegioniBolloTest {
         )
         val result = BolloRules2026.calcolaBollo(veicoloIbrido)
         
-        // Lazio: nessuna riduzione per ibride
+        // Lazio: no reduction for hybrids
         assertEquals("No hybrid reduction in Lazio", 0.0, result.riduzioneAlimentazione, 0.01)
     }
 
@@ -69,7 +69,7 @@ class RegioniBolloTest {
         )
         val result = BolloRules2026.calcolaBollo(veicoloElettricoRecente)
         
-        // Lazio: esenzione 3 anni per elettriche
+        // Lazio: 3-year exemption for electric vehicles
         assertTrue("Electric 2023 in Lazio should be exempt", result.isEsente)
     }
 
@@ -96,14 +96,14 @@ class RegioniBolloTest {
         )
         val result = BolloRules2026.calcolaBollo(veicoloGpl)
         
-        // 75% riduzione nazionale per GPL
+        // 75% national reduction for LPG
         val expectedReduction = result.bolloBase * 0.75
         assertEquals("75% national GPL reduction", expectedReduction, result.riduzioneAlimentazione, 0.01)
     }
 
     @Test
     fun testCoefficienteRegionale() {
-        // Test che il coefficiente regionale venga applicato
+        // Test that the regional coefficient is applied
         val veicolo = Veicolo(
             marca = "Test", modello = "Test", kw = 100, cv = 136,
             classeEuro = ClasseEuro.EURO_6, alimentazione = Alimentazione.BENZINA,
@@ -114,7 +114,7 @@ class RegioniBolloTest {
         val veicoloPiemonte = veicolo.copy(regione = Regione.PIEMONTE)
         val resultPiemonte = BolloRules2026.calcolaBollo(veicoloPiemonte)
         
-        // Stesso coefficiente (1.0) = stesso bollo base
+        // Same coefficient (1.0) = same base bollo
         assertEquals("Same coefficient should give same base", resultLombardia.bolloBase, resultPiemonte.bolloBase, 0.01)
     }
 }

@@ -100,7 +100,8 @@ fun AppNavHost(navController: NavHostController, startDestination: String = "hom
         }
         composable("settings") {
             SettingsScreen(
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToPro = { navController.navigate("pro") }
             )
         }
         composable("pro") {

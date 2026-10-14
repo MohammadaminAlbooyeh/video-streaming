@@ -8,10 +8,10 @@ import java.time.YearMonth
 
 object RevisioneRules {
 
-    // Prima revisione: 4 anni dall'immatricolazione
-    // Revisioni successive: ogni 2 anni
-    // Veicoli storici (30+ anni): ogni 2 anni
-    // Veicoli elettrici: alcune regioni esentano prima revisione
+    // First revisione (inspection): 4 years after registration
+    // Subsequent revisioni: every 2 years
+    // Historic vehicles (30+ years): every 2 years
+    // Electric vehicles: some regions exempt the first revisione
 
     fun calcolaProssimaRevisione(
         dataImmatricolazione: LocalDate,
@@ -24,8 +24,8 @@ object RevisioneRules {
         val ora = LocalDate.now()
         val annoImm = dataImmatricolazione.year
 
-        // Prima revisione: 4 anni dall'immatricolazione; successive: 2 anni dall'ultima.
-        // La scadenza è l'ultimo giorno del mese di riferimento, anche se già passata.
+        // First revisione: 4 years after registration; subsequent ones: 2 years after the last.
+        // The due date is the last day of the reference month, even if already past.
         val prossimaScadenza: LocalDate = if (ultimaRevisione == null) {
             val anno = annoImm + 4
             LocalDate.of(anno, dataImmatricolazione.month, dataImmatricolazione.month.maxDaysInMonth(anno))
@@ -35,13 +35,13 @@ object RevisioneRules {
         }
         val anniProssima = prossimaScadenza.year - ora.year
 
-        // Veicoli storici: revisione ogni 2 anni dopo i 30 anni
+        // Historic vehicles: revisione every 2 years after 30 years of age
         var note = ""
         if (isStorico) {
             note = "Veicolo storico: revisione ogni 2 anni"
         }
         
-        // Elettrici: alcune regioni esentano prima revisione
+        // Electric: some regions exempt the first revisione
         if (isElettrico && RegioniBollo.isEsenzioneElettricaApplicabile(regione, annoImm)) {
             note = if (note.isBlank()) "Veicolo elettrico: esenzione prima revisione" else "$note; Veicolo elettrico: esenzione prima revisione"
         }
