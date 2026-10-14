@@ -11,7 +11,6 @@ import it.bollofacile.ui.bollo.BolloCalcScreen
 import it.bollofacile.ui.bollo.BolloViewModel
 import it.bollofacile.ui.home.HomeScreen
 import it.bollofacile.ui.home.HomeViewModel
-import it.bollofacile.ui.pro.ProScreen
 import it.bollofacile.ui.revisione.RevisioneScreen
 import it.bollofacile.ui.sanzioni.SanzioniScreen
 import it.bollofacile.ui.settings.SettingsScreen
@@ -42,9 +41,6 @@ fun AppNavHost(navController: NavHostController, startDestination: String = "hom
                 },
                 onNavigateToSettings = {
                     navController.navigate("settings")
-                },
-                onNavigateToPro = {
-                    navController.navigate("pro")
                 }
             )
         }
@@ -100,12 +96,6 @@ fun AppNavHost(navController: NavHostController, startDestination: String = "hom
         }
         composable("settings") {
             SettingsScreen(
-                onNavigateBack = { navController.popBackStack() },
-                onNavigateToPro = { navController.navigate("pro") }
-            )
-        }
-        composable("pro") {
-            ProScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
         }

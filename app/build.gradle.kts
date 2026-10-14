@@ -109,8 +109,7 @@ dependencies {
     implementation(libs.datastorePreferences)
     implementation(libs.workManager)
 
-    implementation(libs.playBilling)
-    implementation(libs.playBillingKtx)
+    implementation(libs.appcompat)
 
     implementation(libs.playServicesAds)
     implementation(libs.ump)

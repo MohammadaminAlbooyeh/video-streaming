@@ -11,7 +11,7 @@ coroutines = "1.8.0"
 kotlinxDatetime = "0.5.0"
 activityCompose = "1.9.1"
 workManager = "2.9.0"
-playBilling = "7.0.0"
+appcompat = "1.7.0"
 playServicesAds = "23.0.0"
 ump = "3.0.0"
 junit = "4.13.2"
@@ -60,8 +60,7 @@ datastorePreferences = { module = "androidx.datastore:datastore-preferences", ve
 
 workManager = { module = "androidx.work:work-runtime-ktx", version.ref = "workManager" }
 
-playBilling = { module = "com.android.billingclient:billing", version.ref = "playBilling" }
-playBillingKtx = { module = "com.android.billingclient:billing-ktx", version.ref = "playBilling" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 
 playServicesAds = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 ump = { module = "com.google.android.ump:user-messaging-platform", version.ref = "ump" }

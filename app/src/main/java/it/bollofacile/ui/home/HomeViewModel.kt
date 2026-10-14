@@ -12,13 +12,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     prossimeScadenzeUseCase: ProssimeScadenzeUseCase,
     veicoloRepository: VeicoloRepository,
-    settingsStore: SettingsStore
+    val settingsStore: SettingsStore
 ) : ViewModel() {
 
     val scadenze: StateFlow<List<ScadenzaVeicolo>> = prossimeScadenzeUseCase()
@@ -30,7 +31,5 @@ class HomeViewModel @Inject constructor(
         .distinctUntilChanged()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
-    val isPro: StateFlow<Boolean> = settingsStore.isProEnabled
-        .distinctUntilChanged()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    fun setTheme(theme: Int) = viewModelScope.launch { settingsStore.setTheme(theme) }
 }

@@ -90,31 +90,11 @@
     <string name="reminders">Reminders</string>
     <string name="reminder_notifications">Reminder notifications</string>
     <string name="reminder_days">Days before due date</string>
-    <string name="pro_version">Pro version</string>
-    <string name="pro_active">Pro active</string>
-    <string name="unlock_pro">Unlock Pro version</string>
-    <string name="restore_purchases">Restore purchases</string>
     <string name="version">Version</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="open_source_licenses">Open Source Licenses</string>
     
     <!-- Pro -->
-    <string name="pro_title">BolloFacile Pro</string>
-    <string name="pro_thanks">Thanks for your support!</string>
-    <string name="pro_features_slogan">Pro features</string>
-    <string name="pro_feature_history">Payment history</string>
-    <string name="pro_feature_history_desc">Save and view all tax and inspection payments</string>
-    <string name="pro_feature_export">Export/Import data</string>
-    <string name="pro_feature_export_desc">Complete backup in JSON/CSV</string>
-    <string name="pro_feature_no_ads">No ads</string>
-    <string name="pro_feature_no_ads_desc">Clean experience without banners or interstitials</string>
-    <string name="pro_feature_support">Priority support</string>
-    <string name="pro_feature_support_desc">Quick responses to your questions</string>
-    <string name="pro_feature_updates">Lifetime updates</string>
-    <string name="pro_feature_updates_desc">Always updated rates every year</string>
-    <string name="buy_pro">Buy Pro - €4.99 (one-time)</string>
-    <string name="why_pro">Why Pro?</string>
-    <string name="why_pro_text">BolloFacile is developed by a small independent team. Your purchase helps us keep the app updated with new annual rates, add new features, and ensure an ad-free experience. Thank you for your support!</string>
     
     <!-- Errors -->
     <string name="error_required">Required field</string>
@@ -154,10 +134,7 @@
     <string name="theme_choose">Choose the app\'s appearance</string>
     <string name="reminder_notifications_desc">Get alerts for bollo and inspection due dates</string>
     <string name="days_short_fmt">%1$d d</string>
-    <string name="pro_all_unlocked">All features unlocked</string>
     <string name="data_section">Data</string>
-    <string name="export_desc_pro">Export vehicles and payments as CSV</string>
-    <string name="export_pro_only">Data export is a Pro feature</string>
     <string name="export_csv">Export data (CSV)</string>
     <string name="about">About</string>
     <string name="read">Read</string>
@@ -165,8 +142,6 @@
     <string name="export_subject">BolloFacile data export</string>
 
     <!-- Pro (extra) -->
-    <string name="pro_unlocked_msg">You have unlocked all Pro features</string>
-    <string name="pro_benefits_list">\u2022 Unlimited payment history\n\u2022 Data export\n\u2022 No ads\n\u2022 Priority support\n\u2022 Lifetime rate updates</string>
-    <string name="unlock_pro_panel">Unlock the Pro version</string>
-    <string name="buy_pro_fmt">Buy Pro - %1$s (one-time)</string>
+    <string name="language">Language</string>
+    <string name="export_desc">Export vehicles and payments as CSV</string>
 </resources>

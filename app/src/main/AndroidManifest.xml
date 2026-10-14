@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <application
@@ -21,6 +20,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BolloFacile"
@@ -31,6 +31,16 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id"
             tools:replace="android:value" />
+
+        <!-- Persists the per-app locale chosen via AppCompatDelegate on Android < 13 -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
 
         <!-- Main activity -->
         <activity
@@ -71,13 +81,5 @@
         </provider>
 
     </application>
-
-    <!-- Queries for Play Billing -->
-    <queries>
-        <package android:name="com.android.vending" />
-        <intent>
-            <action android:name="com.android.vending.billing.PURCHASES_UPDATED" />
-        </intent>
-    </queries>
 
 </manifest>

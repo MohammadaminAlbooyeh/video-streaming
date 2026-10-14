@@ -44,15 +44,13 @@ import javax.inject.Inject
 
 @Composable
 fun SettingsScreen(
-    onNavigateBack: () -> Unit,
-    onNavigateToPro: () -> Unit = {}
+    onNavigateBack: () -> Unit
 ) {
     val viewModel = hiltViewModel<SettingsViewModel>()
     val theme by viewModel.settingsStore.theme.collectAsStateWithLifecycle(initialValue = SettingsStore.THEME_SYSTEM)
     val regioneDefault by viewModel.settingsStore.regioneDefault.collectAsStateWithLifecycle(initialValue = "LOM")
     val reminderDays by viewModel.settingsStore.reminderDays.collectAsStateWithLifecycle(initialValue = emptyList())
     val notificationsEnabled by viewModel.settingsStore.notificationsEnabled.collectAsStateWithLifecycle(initialValue = true)
-    val isPro by viewModel.settingsStore.isProEnabled.collectAsStateWithLifecycle(initialValue = false)
     val activity = LocalContext.current as? android.app.Activity
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -156,40 +154,17 @@ fun SettingsScreen(
                 }
             }
 
-            // Pro status
-            Panel(title = stringResource(R.string.pro_version)) {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    if (isPro) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                Text(text = stringResource(R.string.pro_active), fontWeight = FontWeight.Bold)
-                                Text(text = stringResource(R.string.pro_all_unlocked), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
-                            }
-                            Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Pro", tint = MaterialTheme.colorScheme.primary)
-                        }
-                    } else {
-                        Button(onClick = onNavigateToPro, modifier = Modifier.fillMaxWidth()) {
-                            Text(text = stringResource(R.string.unlock_pro))
-                        }
-                    }
-                }
-            }
-
-            // Data export (Pro)
+            // Data export
             Panel(title = stringResource(R.string.data_section)) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = if (isPro) stringResource(R.string.export_desc_pro) else stringResource(R.string.export_pro_only),
+                        text = stringResource(R.string.export_desc),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Button(
                         onClick = { activity?.let { viewModel.exportCsv(it) } },
-                        enabled = isPro && activity != null,
+                        enabled = activity != null,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(text = stringResource(R.string.export_csv))

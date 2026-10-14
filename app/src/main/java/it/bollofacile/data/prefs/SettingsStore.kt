@@ -22,7 +22,6 @@ class SettingsStore @Inject constructor(
     private val KEY_REGIONE_DEFAULT = stringPreferencesKey("regione_default")
     private val KEY_REMINDER_DAYS = stringPreferencesKey("reminder_days")
     private val KEY_THEME = intPreferencesKey("theme")
-    private val KEY_PRO_ENABLED = booleanPreferencesKey("pro_enabled")
     private val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
     private val KEY_AD_CONSENT = booleanPreferencesKey("ad_consent")
     private val KEY_FIRST_LAUNCH = booleanPreferencesKey("first_launch")
@@ -58,13 +57,6 @@ class SettingsStore @Inject constructor(
         context.dataStore.edit { it[KEY_THEME] = theme }
     }
 
-    val isProEnabled: Flow<Boolean> = context.dataStore.data
-        .map { it[KEY_PRO_ENABLED] ?: false }
-
-    suspend fun setProEnabled(enabled: Boolean) {
-        context.dataStore.edit { it[KEY_PRO_ENABLED] = enabled }
-    }
-
     val notificationsEnabled: Flow<Boolean> = context.dataStore.data
         .map { it[KEY_NOTIFICATIONS_ENABLED] ?: true }
 
@@ -89,5 +81,4 @@ class SettingsStore @Inject constructor(
     suspend fun getRegioneDefaultSync(): String = regioneDefault.first()
     suspend fun getReminderDaysSync(): List<Int> = reminderDays.first()
     suspend fun getThemeSync(): Int = theme.first()
-    suspend fun isProEnabledSync(): Boolean = isProEnabled.first()
 }

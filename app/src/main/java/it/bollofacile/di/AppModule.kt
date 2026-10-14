@@ -15,7 +15,6 @@ import it.bollofacile.domain.CalcolaRevisioneUseCase
 import it.bollofacile.domain.CalcolaSanzioneUseCase
 import it.bollofacile.domain.ProssimeScadenzeUseCase
 import it.bollofacile.reminder.ReminderScheduler
-import it.bollofacile.billing.BillingManager
 import it.bollofacile.ads.ConsentManager
 import it.bollofacile.ads.AdManager
 import javax.inject.Singleton
@@ -64,12 +63,6 @@ object AppModule {
         scadenzeUseCase: ProssimeScadenzeUseCase
     ): ReminderScheduler {
         return ReminderScheduler(context, settingsStore, scadenzeUseCase)
-    }
-
-    @Provides
-    @Singleton
-    fun provideBillingManager(@dagger.hilt.android.qualifiers.ApplicationContext context: Context): BillingManager {
-        return BillingManager(context)
     }
 
     @Provides

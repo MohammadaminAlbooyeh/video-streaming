@@ -16,8 +16,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Event
+import androidx.compose.material.icons.filled.BrightnessMedium
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,8 +29,13 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.core.os.LocaleListCompat
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,6 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import it.bollofacile.R
+import it.bollofacile.data.prefs.SettingsStore
+import it.bollofacile.ui.components.BannerAd
 import it.bollofacile.ui.components.ScadenzaCard
 import it.bollofacile.ui.components.StatCard
 
@@ -47,12 +57,10 @@ fun HomeScreen(
     onNavigateToBolloCalc: () -> Unit,
     onNavigateToRevisione: () -> Unit,
     onNavigateToSanzioni: () -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToPro: () -> Unit
+    onNavigateToSettings: () -> Unit
 ) {
     val scadenze by viewModel.scadenze.collectAsStateWithLifecycle()
     val veicoliCount by viewModel.veicoliCount.collectAsStateWithLifecycle()
-    val isPro by viewModel.isPro.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -64,15 +72,8 @@ fun HomeScreen(
                     )
                 },
                 actions = {
-                    if (!isPro) {
-                        IconButton(onClick = onNavigateToPro) {
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = stringResource(R.string.pro_title),
-                                tint = MaterialTheme.colorScheme.tertiary
-                            )
-                        }
-                    }
+                    ThemeMenuButton(onThemeSelected = { viewModel.setTheme(it) })
+                    LanguageMenuButton()
                     IconButton(onClick = onNavigateToSettings) {
                         Icon(
                             imageVector = Icons.Default.Settings,
@@ -81,6 +82,9 @@ fun HomeScreen(
                     }
                 }
             )
+        },
+        bottomBar = {
+            BannerAd(adUnitId = stringResource(R.string.admob_banner_id))
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -181,5 +185,57 @@ fun HomeScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ThemeMenuButton(onThemeSelected: (Int) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    IconButton(onClick = { expanded = true }) {
+        Icon(
+            imageVector = Icons.Default.BrightnessMedium,
+            contentDescription = stringResource(R.string.theme)
+        )
+    }
+    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.theme_system)) },
+            onClick = { onThemeSelected(SettingsStore.THEME_SYSTEM); expanded = false }
+        )
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.theme_light)) },
+            onClick = { onThemeSelected(SettingsStore.THEME_LIGHT); expanded = false }
+        )
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.theme_dark)) },
+            onClick = { onThemeSelected(SettingsStore.THEME_DARK); expanded = false }
+        )
+    }
+}
+
+@Composable
+private fun LanguageMenuButton() {
+    var expanded by remember { mutableStateOf(false) }
+    IconButton(onClick = { expanded = true }) {
+        Icon(
+            imageVector = Icons.Default.Language,
+            contentDescription = stringResource(R.string.language)
+        )
+    }
+    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenuItem(
+            text = { Text("Italiano") },
+            onClick = {
+                expanded = false
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("it"))
+            }
+        )
+        DropdownMenuItem(
+            text = { Text("English") },
+            onClick = {
+                expanded = false
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
+            }
+        )
     }
 }

@@ -90,31 +90,11 @@
     <string name="reminders">Promemoria</string>
     <string name="reminder_notifications">Notifiche promemoria</string>
     <string name="reminder_days">Giorni prima della scadenza</string>
-    <string name="pro_version">Versione Pro</string>
-    <string name="pro_active">Pro attivo</string>
-    <string name="unlock_pro">Sblocca versione Pro</string>
-    <string name="restore_purchases">Ripristina acquisti</string>
     <string name="version">Versione</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="open_source_licenses">Licenze Open Source</string>
     
     <!-- Pro -->
-    <string name="pro_title">BolloFacile Pro</string>
-    <string name="pro_thanks">Grazie per il supporto!</string>
-    <string name="pro_features_slogan">Funzionalità Pro</string>
-    <string name="pro_feature_history">Storico pagamenti</string>
-    <string name="pro_feature_history_desc">Salva e visualizza tutti i pagamenti bollo e revisione</string>
-    <string name="pro_feature_export">Export/Import dati</string>
-    <string name="pro_feature_export_desc">Backup completo in JSON/CSV</string>
-    <string name="pro_feature_no_ads">Nessuna pubblicità</string>
-    <string name="pro_feature_no_ads_desc">Esperienza pulita senza banner o interstitial</string>
-    <string name="pro_feature_support">Supporto prioritario</string>
-    <string name="pro_feature_support_desc">Risposte rapide alle tue domande</string>
-    <string name="pro_feature_updates">Aggiornamenti a vita</string>
-    <string name="pro_feature_updates_desc">Tariffe sempre aggiornate ogni anno</string>
-    <string name="buy_pro">Acquista Pro - €4,99 (una tantum)</string>
-    <string name="why_pro">Perché Pro?</string>
-    <string name="why_pro_text">BolloFacile è sviluppato da un piccolo team indipendente. Il tuo acquisto ci aiuta a mantenere l\'app aggiornata con le nuove tariffe annuali, aggiungere nuove funzionalità e garantire un\'esperienza senza pubblicità. Grazie per il tuo supporto!</string>
     
     <!-- Errors -->
     <string name="error_required">Campo obbligatorio</string>
@@ -154,10 +134,7 @@
     <string name="theme_choose">Scegli l\'aspetto dell\'app</string>
     <string name="reminder_notifications_desc">Ricevi avvisi per scadenze bollo e revisione</string>
     <string name="days_short_fmt">%1$d gg</string>
-    <string name="pro_all_unlocked">Tutte le funzionalità sbloccate</string>
     <string name="data_section">Dati</string>
-    <string name="export_desc_pro">Esporta veicoli e pagamenti in formato CSV</string>
-    <string name="export_pro_only">L\'export dati è una funzionalità Pro</string>
     <string name="export_csv">Esporta dati (CSV)</string>
     <string name="about">Informazioni</string>
     <string name="read">Leggi</string>
@@ -165,8 +142,6 @@
     <string name="export_subject">Export dati BolloFacile</string>
 
     <!-- Pro (extra) -->
-    <string name="pro_unlocked_msg">Hai sbloccato tutte le funzionalità Pro</string>
-    <string name="pro_benefits_list">• Storico pagamenti illimitato\n• Export dati\n• Nessuna pubblicità\n• Supporto prioritario\n• Aggiornamenti tariffe a vita</string>
-    <string name="unlock_pro_panel">Sblocca la versione Pro</string>
-    <string name="buy_pro_fmt">Acquista Pro - %1$s (una tantum)</string>
+    <string name="language">Lingua</string>
+    <string name="export_desc">Esporta veicoli e pagamenti in formato CSV</string>
 </resources>
