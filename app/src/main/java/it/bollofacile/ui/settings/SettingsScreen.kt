@@ -191,7 +191,7 @@ fun SettingsScreen(
     }
 }
 
-private const val PRIVACY_POLICY_URL = "https://github.com/MohammadaminAlbooyeh/bollo-facile/blob/master/PRIVACY_POLICY.md"
+private const val PRIVACY_POLICY_URL = "https://github.com/MohammadaminAlbooyeh/bollo-facile-privacy/blob/main/PRIVACY_POLICY.md"
 
 private fun openUrl(activity: android.app.Activity, url: String) {
     runCatching {

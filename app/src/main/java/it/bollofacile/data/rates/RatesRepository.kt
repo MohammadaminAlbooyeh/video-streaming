@@ -20,7 +20,7 @@ import java.net.URL
 object RatesRepository {
 
     private const val RATES_URL =
-        "https://raw.githubusercontent.com/MohammadaminAlbooyeh/bollo-facile/master/rates.json"
+        "https://raw.githubusercontent.com/MohammadaminAlbooyeh/bollo-facile-privacy/main/rates.json"
     private const val CACHE_FILE = "rates_cache.json"
 
     suspend fun loadAndRefresh(context: Context) = withContext(Dispatchers.IO) {
