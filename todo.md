@@ -1,6 +1,8 @@
 # BolloFacile — TODO
 
-Status as of 2026-10-14 (commit `a1f07c4`): project builds (assembleDebug/assembleRelease/lint OK), 38/38 unit tests pass. Remaining steps below.
+Status as of 2026-10-15: project builds (assembleDebug/assembleRelease/lint OK), 38/38 unit tests pass.
+New since 2026-10-15: compare-two-vehicles mode in BolloCalc, add-deadline-to-calendar buttons,
+remote rates config (rates.json on GitHub, fetched at startup with local cache).
 
 ## Done ✅
 - [x] Initial app scaffolding (Kotlin + Jetpack Compose, data/domain/rules/ui architecture)

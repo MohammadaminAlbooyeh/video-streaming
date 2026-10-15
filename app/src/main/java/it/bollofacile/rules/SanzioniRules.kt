@@ -18,21 +18,15 @@ object SanzioniRules {
     // - Within 2 years: 1/5 of the minimum (3%)
     // Beyond 2 years: full penalty (30%) + interest
 
-    // Base penalty: 30% of the amount due (min €25, max the amount due)
-    const val SANZIONE_PERCENTUALE = 0.30
-    const val SANZIONE_MINIMA = 25.0
-    
-    // Legal interest rate 2026 (update annually)
-    const val INTERESSE_LEGALE_ANNUO = 0.025 // 2.5%
+    // Year-dependent values live in Rates.current so they can be updated remotely.
+    val SANZIONE_PERCENTUALE: Double get() = Rates.current.sanzionePercentuale
+    val SANZIONE_MINIMA: Double get() = Rates.current.sanzioneMinima
+    val INTERESSE_LEGALE_ANNUO: Double get() = Rates.current.interesseLegaleAnnuo
 
-    // Ravvedimento operoso brackets
-    private val FASCE_RAVVEDIMENTO = listOf(
-        FasciaRavvedimento(14, 0.10, "Entro 14 giorni (1/10)"),
-        FasciaRavvedimento(30, 0.125, "Entro 30 giorni (1/8)"),
-        FasciaRavvedimento(90, 0.142857, "Entro 90 giorni (1/7)"),
-        FasciaRavvedimento(365, 0.166667, "Entro 1 anno (1/6)"),
-        FasciaRavvedimento(730, 0.20, "Entro 2 anni (1/5)")
-    )
+    private val FASCE_RAVVEDIMENTO: List<FasciaRavvedimento>
+        get() = Rates.current.fasceRavvedimento.map {
+            FasciaRavvedimento(it.giorniMax, it.riduzione, it.descrizione)
+        }
 
     data class FasciaRavvedimento(
         val giorniMax: Int,

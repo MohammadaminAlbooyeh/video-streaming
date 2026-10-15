@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "tariffeKw": {
+    "0": 2.58,
+    "1": 2.58,
+    "100": 4.50,
+    "185": 4.50,
+    "186": 6.50,
+    "200": 6.50
+  },
+  "superbolloPerKw": 20.0,
+  "sogliaSuperbolloKw": 185,
+  "sanzionePercentuale": 0.30,
+  "sanzioneMinima": 25.0,
+  "interesseLegaleAnnuo": 0.016,
+  "fasceRavvedimento": [
+    { "giorniMax": 14, "riduzione": 0.10, "descrizione": "Entro 14 giorni (1/10)" },
+    { "giorniMax": 30, "riduzione": 0.125, "descrizione": "Entro 30 giorni (1/8)" },
+    { "giorniMax": 90, "riduzione": 0.142857, "descrizione": "Entro 90 giorni (1/7)" },
+    { "giorniMax": 365, "riduzione": 0.166667, "descrizione": "Entro 1 anno (1/6)" },
+    { "giorniMax": 730, "riduzione": 0.20, "descrizione": "Entro 2 anni (1/5)" }
+  ]
+}

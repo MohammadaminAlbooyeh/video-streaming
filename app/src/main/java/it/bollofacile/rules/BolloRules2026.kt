@@ -10,20 +10,11 @@ import java.math.RoundingMode
 
 object BolloRules2026 {
 
-    // Base rates per kW (2026 values - update annually)
-    private val TARIFFE_KW = mapOf(
-        0 to 2.58,
-        1 to 2.58,
-        // ... intermediate values
-        100 to 4.50,
-        185 to 4.50,
-        186 to 6.50,  // Superbollo kicks in here
-        200 to 6.50
-    )
+    // Year-dependent values live in Rates.current so they can be updated remotely.
+    private val TARIFFE_KW: Map<Int, Double> get() = Rates.current.tariffeKw
 
-    // Superbollo: 20€ for each kW above 185
-    const val SUPERBOLLO_PER_KW = 20.0
-    const val SOGLIA_SUPERBOLLO_KW = 185
+    val SUPERBOLLO_PER_KW: Double get() = Rates.current.superbolloPerKw
+    val SOGLIA_SUPERBOLLO_KW: Int get() = Rates.current.sogliaSuperbolloKw
 
     fun calcolaBollo(veicolo: Veicolo, regione: Regione = veicolo.regione): BolloResult {
         // Historic vehicles (30+ years) are exempt

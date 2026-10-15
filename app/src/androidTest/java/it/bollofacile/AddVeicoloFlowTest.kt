@@ -20,15 +20,21 @@ class AddVeicoloFlowTest {
 
     @Test
     fun homeScreen_opensAddVeicoloForm() {
+        // Resolve strings through the activity so the test follows the app's
+        // per-app locale (Italian or English) instead of hardcoding one language.
+        val addVehicle = composeRule.activity.getString(R.string.add_vehicle)
+        val brand = composeRule.activity.getString(R.string.brand)
+        val model = composeRule.activity.getString(R.string.model)
+
         composeRule.waitUntil(timeoutMillis = 10_000) {
-            composeRule.onAllNodesWithText("Aggiungi veicolo").fetchSemanticsNodes().isNotEmpty()
+            composeRule.onAllNodesWithText(addVehicle).fetchSemanticsNodes().isNotEmpty()
         }
-        composeRule.onNodeWithText("Aggiungi veicolo").performClick()
+        composeRule.onNodeWithText(addVehicle).performClick()
 
-        composeRule.onNodeWithText("Marca").assertIsDisplayed()
-        composeRule.onNodeWithText("Modello").assertIsDisplayed()
+        composeRule.onNodeWithText(brand).assertIsDisplayed()
+        composeRule.onNodeWithText(model).assertIsDisplayed()
 
-        composeRule.onNodeWithText("Marca").performTextInput("Fiat")
-        composeRule.onNodeWithText("Modello").performTextInput("500")
+        composeRule.onNodeWithText(brand).performTextInput("Fiat")
+        composeRule.onNodeWithText(model).performTextInput("500")
     }
 }

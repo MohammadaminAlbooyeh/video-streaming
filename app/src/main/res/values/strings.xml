@@ -144,4 +144,21 @@
     <!-- Pro (extra) -->
     <string name="language">Lingua</string>
     <string name="export_desc">Esporta veicoli e pagamenti in formato CSV</string>
+
+    <!-- Calendar -->
+    <string name="add_to_calendar">Aggiungi al calendario</string>
+    <string name="no_calendar_app">Nessuna app calendario trovata</string>
+    <string name="calendar_event_bollo">Scadenza bollo %1$s</string>
+    <string name="calendar_event_revisione">Revisione %1$s</string>
+    <string name="calendar_event_bollo_generic">Scadenza bollo auto</string>
+    <string name="calendar_event_revisione_generic">Revisione auto</string>
+
+    <!-- Compare -->
+    <string name="compare_vehicles">Confronta due veicoli</string>
+    <string name="vehicle_a">Veicolo A</string>
+    <string name="vehicle_b">Veicolo B</string>
+    <string name="comparison">Confronto</string>
+    <string name="cheaper_fmt">%1$s costa %2$s in meno all\'anno</string>
+    <string name="same_cost">Stesso bollo annuale</string>
+    <string name="bollo_per_year">Bollo annuale</string>
 </resources>

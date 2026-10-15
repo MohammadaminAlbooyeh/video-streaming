@@ -54,6 +54,7 @@ fun VeicoloDetailScreen(
 
     val bolloResult = viewModel.calcolaBollo(veicolo)
     val revisioneResult = viewModel.calcolaRevisione(veicolo)
+    val context = androidx.compose.ui.platform.LocalContext.current
 
     Scaffold(
         topBar = {
@@ -153,6 +154,16 @@ fun VeicoloDetailScreen(
                         Text(text = stringResource(R.string.total), fontWeight = FontWeight.Bold)
                         Text(text = "€${"%.2f".format(bolloResult.totale)}", fontWeight = FontWeight.Bold)
                     }
+                    androidx.compose.material3.TextButton(onClick = {
+                        it.bollofacile.util.addDeadlineToCalendar(
+                            context = context,
+                            title = context.getString(R.string.calendar_event_bollo, "${veicolo.marca} ${veicolo.modello}"),
+                            description = "€${"%.2f".format(bolloResult.totale)}",
+                            date = bolloResult.scadenza
+                        )
+                    }) {
+                        Text(text = stringResource(R.string.add_to_calendar))
+                    }
                 }
             }
 
@@ -168,6 +179,16 @@ fun VeicoloDetailScreen(
                     )
                     revisioneResult.note.ifNotBlank { note ->
                         Text(text = note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    androidx.compose.material3.TextButton(onClick = {
+                        it.bollofacile.util.addDeadlineToCalendar(
+                            context = context,
+                            title = context.getString(R.string.calendar_event_revisione, "${veicolo.marca} ${veicolo.modello}"),
+                            description = "",
+                            date = revisioneResult.prossimaScadenza
+                        )
+                    }) {
+                        Text(text = stringResource(R.string.add_to_calendar))
                     }
                 }
             }

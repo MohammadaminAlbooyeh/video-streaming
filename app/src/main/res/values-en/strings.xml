@@ -144,4 +144,21 @@
     <!-- Pro (extra) -->
     <string name="language">Language</string>
     <string name="export_desc">Export vehicles and payments as CSV</string>
+
+    <!-- Calendar -->
+    <string name="add_to_calendar">Add to calendar</string>
+    <string name="no_calendar_app">No calendar app found</string>
+    <string name="calendar_event_bollo">Bollo due %1$s</string>
+    <string name="calendar_event_revisione">Inspection due %1$s</string>
+    <string name="calendar_event_bollo_generic">Car tax (bollo) due</string>
+    <string name="calendar_event_revisione_generic">Car inspection due</string>
+
+    <!-- Compare -->
+    <string name="compare_vehicles">Compare two vehicles</string>
+    <string name="vehicle_a">Vehicle A</string>
+    <string name="vehicle_b">Vehicle B</string>
+    <string name="comparison">Comparison</string>
+    <string name="cheaper_fmt">%1$s costs %2$s less per year</string>
+    <string name="same_cost">Same yearly bollo</string>
+    <string name="bollo_per_year">Yearly bollo</string>
 </resources>

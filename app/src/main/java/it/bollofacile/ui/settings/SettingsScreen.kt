@@ -206,12 +206,14 @@ private fun ThemeOption(modifier: Modifier = Modifier, text: String, selected: B
     OutlinedButton(
         onClick = onClick,
         modifier = modifier,
+        // Narrow padding so labels like "Sistema" fit on one line in a 3-button row
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
             containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerHighest,
             contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
         )
     ) {
-        Text(text = text)
+        Text(text = text, maxLines = 1)
     }
 }
 
