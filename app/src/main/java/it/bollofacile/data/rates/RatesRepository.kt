@@ -57,9 +57,19 @@ object RatesRepository {
         // Never downgrade: ignore a remote/cached file older than the built-in defaults.
         if (version < defaults.version) return
 
-        val tariffe = root.optJSONObject("tariffeKw")?.let { obj ->
-            obj.keys().asSequence().associate { key -> key.toInt() to obj.getDouble(key) }
-        } ?: defaults.tariffeKw
+        val tariffe = root.optJSONObject("tariffeEuro")?.let { obj ->
+            obj.keys().asSequence().associate { key ->
+                val t = obj.getJSONObject(key)
+                key to RatesConfig.TariffaEuro(t.getDouble("fino100"), t.getDouble("oltre100"))
+            }
+        } ?: defaults.tariffeEuro
+
+        val superbolloEta = root.optJSONArray("superbolloRiduzioneEta")?.let { arr ->
+            (0 until arr.length()).map { i ->
+                val f = arr.getJSONObject(i)
+                RatesConfig.FasciaEta(f.getInt("etaMinAnni"), f.getDouble("quota"))
+            }
+        } ?: defaults.superbolloRiduzioneEta
 
         val fasce = root.optJSONArray("fasceRavvedimento")?.let { arr ->
             (0 until arr.length()).map { i ->
@@ -67,20 +77,23 @@ object RatesRepository {
                 RatesConfig.FasciaRates(
                     giorniMax = f.getInt("giorniMax"),
                     riduzione = f.getDouble("riduzione"),
-                    descrizione = f.getString("descrizione")
+                    descrizione = f.getString("descrizione"),
+                    perGiorno = f.optBoolean("perGiorno", false)
                 )
             }
         } ?: defaults.fasceRavvedimento
 
         Rates.current = RatesConfig(
             version = version,
-            tariffeKw = tariffe,
+            tariffeEuro = tariffe,
+            sogliaTariffaKw = root.optInt("sogliaTariffaKw", defaults.sogliaTariffaKw),
             superbolloPerKw = root.optDouble("superbolloPerKw", defaults.superbolloPerKw),
             sogliaSuperbolloKw = root.optInt("sogliaSuperbolloKw", defaults.sogliaSuperbolloKw),
+            superbolloRiduzioneEta = superbolloEta,
             sanzionePercentuale = root.optDouble("sanzionePercentuale", defaults.sanzionePercentuale),
-            sanzioneMinima = root.optDouble("sanzioneMinima", defaults.sanzioneMinima),
             interesseLegaleAnnuo = root.optDouble("interesseLegaleAnnuo", defaults.interesseLegaleAnnuo),
-            fasceRavvedimento = fasce
+            fasceRavvedimento = fasce,
+            sanzioneOltreUltimaFascia = root.optDouble("sanzioneOltreUltimaFascia", defaults.sanzioneOltreUltimaFascia)
         )
     }
 }

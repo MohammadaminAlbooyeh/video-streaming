@@ -35,15 +35,12 @@ object RevisioneRules {
         }
         val anniProssima = prossimaScadenza.year - ora.year
 
-        // Historic vehicles: revisione every 2 years after 30 years of age
+        // Historic vehicles: revisione every 2 years after 30 years of age.
+        // Note: the revisione is a national obligation — electric vehicles are
+        // NOT exempt in any region.
         var note = ""
         if (isStorico) {
             note = "Veicolo storico: revisione ogni 2 anni"
-        }
-        
-        // Electric: some regions exempt the first revisione
-        if (isElettrico && RegioniBollo.isEsenzioneElettricaApplicabile(regione, annoImm)) {
-            note = if (note.isBlank()) "Veicolo elettrico: esenzione prima revisione" else "$note; Veicolo elettrico: esenzione prima revisione"
         }
 
         return RevisioneResult(

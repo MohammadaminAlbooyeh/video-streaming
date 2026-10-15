@@ -1,23 +1,31 @@
 {
-  "version": 2,
-  "tariffeKw": {
-    "0": 2.58,
-    "1": 2.58,
-    "100": 4.50,
-    "185": 4.50,
-    "186": 6.50,
-    "200": 6.50
+  "version": 3,
+  "tariffeEuro": {
+    "EURO_0": { "fino100": 3.00, "oltre100": 4.50 },
+    "EURO_1": { "fino100": 2.90, "oltre100": 4.35 },
+    "EURO_2": { "fino100": 2.80, "oltre100": 4.20 },
+    "EURO_3": { "fino100": 2.70, "oltre100": 4.05 },
+    "EURO_4": { "fino100": 2.58, "oltre100": 3.87 },
+    "EURO_5": { "fino100": 2.58, "oltre100": 3.87 },
+    "EURO_6": { "fino100": 2.58, "oltre100": 3.87 }
   },
+  "sogliaTariffaKw": 100,
   "superbolloPerKw": 20.0,
   "sogliaSuperbolloKw": 185,
-  "sanzionePercentuale": 0.30,
-  "sanzioneMinima": 25.0,
+  "superbolloRiduzioneEta": [
+    { "etaMinAnni": 20, "quota": 0.0 },
+    { "etaMinAnni": 15, "quota": 0.15 },
+    { "etaMinAnni": 10, "quota": 0.30 },
+    { "etaMinAnni": 5, "quota": 0.60 }
+  ],
+  "sanzionePercentuale": 0.25,
   "interesseLegaleAnnuo": 0.016,
   "fasceRavvedimento": [
-    { "giorniMax": 14, "riduzione": 0.10, "descrizione": "Entro 14 giorni (1/10)" },
-    { "giorniMax": 30, "riduzione": 0.125, "descrizione": "Entro 30 giorni (1/8)" },
-    { "giorniMax": 90, "riduzione": 0.142857, "descrizione": "Entro 90 giorni (1/7)" },
-    { "giorniMax": 365, "riduzione": 0.166667, "descrizione": "Entro 1 anno (1/6)" },
-    { "giorniMax": 730, "riduzione": 0.20, "descrizione": "Entro 2 anni (1/5)" }
-  ]
+    { "giorniMax": 14, "riduzione": 0.000833, "descrizione": "Entro 14 giorni (0,0833%/giorno)", "perGiorno": true },
+    { "giorniMax": 30, "riduzione": 0.0125, "descrizione": "Entro 30 giorni (1,25%)" },
+    { "giorniMax": 90, "riduzione": 0.0139, "descrizione": "Entro 90 giorni (1,39%)" },
+    { "giorniMax": 365, "riduzione": 0.03125, "descrizione": "Entro 1 anno (3,125%)" },
+    { "giorniMax": 730, "riduzione": 0.03571, "descrizione": "Entro 2 anni (3,571%)" }
+  ],
+  "sanzioneOltreUltimaFascia": 0.04167
 }

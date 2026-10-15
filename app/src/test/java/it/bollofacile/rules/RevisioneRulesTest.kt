@@ -45,17 +45,17 @@ class RevisioneRulesTest {
     }
 
     @Test
-    fun testElectricVehicleExemption() {
+    fun testElectricVehicleNotExempt() {
+        // The revisione is a national obligation: EVs are NOT exempt in any region
         val dataImm = LocalDate.of(2023, 1, 1)
         val result = RevisioneRules.calcolaProssimaRevisione(
             dataImm,
             isElettrico = true,
             regione = Regione.LOMBARDIA
         )
-        
-        // Lombardia: first-revisione exemption for electric vehicles (within the first 5 years)
-        assertTrue("Electric vehicle in Lombardia should have exemption note", 
-            result.note.contains("elettrico") || result.note.contains("esenzione"))
+
+        assertEquals("First revision after 4 years like any vehicle", 2027, result.prossimaScadenza.year)
+        assertFalse("No exemption note for EVs", result.note.contains("esenzione"))
     }
 
     @Test

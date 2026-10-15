@@ -1,7 +1,6 @@
 package it.bollofacile.rules
 
 import it.bollofacile.util.daysUntil
-import it.bollofacile.util.maxDaysInMonth
 import it.bollofacile.rules.model.*
 import java.time.LocalDate
 import java.math.BigDecimal
@@ -9,39 +8,35 @@ import java.math.RoundingMode
 
 object SanzioniRules {
 
-    // Ravvedimento operoso (voluntary correction, Art. 13 D.Lgs. 472/1997)
-    // Penalty reduction brackets based on days of delay:
-    // - Within 14 days: 1/10 of the minimum (0.1%)
-    // - Within 30 days: 1/8 of the minimum (1.5%)
-    // - Within 90 days: 1/7 of the minimum (1.67%)
-    // - Within 1 year: 1/6 of the minimum (2.5%)
-    // - Within 2 years: 1/5 of the minimum (3%)
-    // Beyond 2 years: full penalty (30%) + interest
+    // Post-reform rules (D.Lgs. 87/2024, violations from 1 September 2024):
+    // base penalty 25% of the unpaid tax; ravvedimento operoso reduces it to
+    // 0.0833%/day within 14 days, 1.25% within 30, 1.39% within 90,
+    // 3.125% within 1 year, 3.571% within 2, 4.167% beyond.
+    // Legal interest accrues daily (1.60%/year from 1 Jan 2026).
 
-    // Year-dependent values live in Rates.current so they can be updated remotely.
     val SANZIONE_PERCENTUALE: Double get() = Rates.current.sanzionePercentuale
-    val SANZIONE_MINIMA: Double get() = Rates.current.sanzioneMinima
     val INTERESSE_LEGALE_ANNUO: Double get() = Rates.current.interesseLegaleAnnuo
-
-    private val FASCE_RAVVEDIMENTO: List<FasciaRavvedimento>
-        get() = Rates.current.fasceRavvedimento.map {
-            FasciaRavvedimento(it.giorniMax, it.riduzione, it.descrizione)
-        }
 
     data class FasciaRavvedimento(
         val giorniMax: Int,
         val riduzione: Double,
-        val descrizione: String
+        val descrizione: String,
+        val perGiorno: Boolean = false
     )
+
+    private val FASCE_RAVVEDIMENTO: List<FasciaRavvedimento>
+        get() = Rates.current.fasceRavvedimento.map {
+            FasciaRavvedimento(it.giorniMax, it.riduzione, it.descrizione, it.perGiorno)
+        }
 
     fun calcolaSanzione(
         importoBollo: Double,
         dataScadenza: LocalDate,
         dataPagamento: LocalDate = LocalDate.now()
     ): SanzioneResult {
-        
+
         val giorniRitardo = dataScadenza.daysUntil(dataPagamento).toInt().coerceAtLeast(0)
-        
+
         if (giorniRitardo == 0) {
             return SanzioneResult(
                 importoOriginale = importoBollo,
@@ -54,23 +49,22 @@ object SanzioniRules {
             )
         }
 
-        // Base penalty (30% with €25 minimum)
-        val sanzioneBase = (importoBollo * SANZIONE_PERCENTUALE).coerceAtLeast(SANZIONE_MINIMA)
-        
-        // Legal interest (daily)
-        val interessiGiornalieri = importoBollo * INTERESSE_LEGALE_ANNUO / 365
-        val interessi = interessiGiornalieri * giorniRitardo
-        
-        // Ravvedimento operoso
+        // Full penalty if no voluntary correction were made
+        val sanzioneBase = importoBollo * SANZIONE_PERCENTUALE
+
+        // Legal interest (daily accrual)
+        val interessi = importoBollo * INTERESSE_LEGALE_ANNUO / 365.0 * giorniRitardo
+
+        // Ravvedimento operoso: reduced penalty as a fraction of the unpaid tax
         val fascia = FASCE_RAVVEDIMENTO.firstOrNull { giorniRitardo <= it.giorniMax }
-        val ravvedimento = if (fascia != null) {
-            sanzioneBase * fascia.riduzione
-        } else {
-            sanzioneBase // No reduction beyond 2 years
+        val ravvedimento = when {
+            fascia == null -> importoBollo * Rates.current.sanzioneOltreUltimaFascia
+            fascia.perGiorno -> importoBollo * fascia.riduzione * giorniRitardo
+            else -> importoBollo * fascia.riduzione
         }
-        
-        val fasciaDesc = fascia?.descrizione ?: "Oltre 2 anni (sanzione piena)"
-        
+
+        val fasciaDesc = fascia?.descrizione ?: "Oltre 2 anni (4,167%)"
+
         val totale = importoBollo + ravvedimento + interessi
 
         return SanzioneResult(
@@ -87,7 +81,7 @@ object SanzioniRules {
     fun getProssimeScadenzeRavvedimento(dataScadenza: LocalDate): List<ScadenzaRavvedimento> {
         return FASCE_RAVVEDIMENTO.map { fascia ->
             ScadenzaRavvedimento(
-                dataLimite = dataScadenza,
+                dataLimite = dataScadenza.plusDays(fascia.giorniMax.toLong()),
                 descrizione = fascia.descrizione,
                 riduzione = fascia.riduzione
             )
