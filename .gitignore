@@ -48,4 +48,4 @@ coverage/
 # Backup
 *.bak
 *.tmp
-*.temp
+*.tempkeystore.jks
