@@ -91,15 +91,14 @@ class ReminderScheduler(
         val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags)
 
         val triggerMillis = triggerDate.atTime(9, 0).atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (alarmManager.canScheduleExactAlarms()) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerMillis, pendingIntent)
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerMillis, pendingIntent)
+
+        // Deadline reminders don't need minute-level precision, so we use the
+        // inexact APIs: this avoids SCHEDULE_EXACT_ALARM/USE_EXACT_ALARM, which
+        // Play restricts to alarm-clock and calendar apps (BolloFacile is neither).
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerMillis, pendingIntent)
         } else {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerMillis, pendingIntent)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, triggerMillis, pendingIntent)
         }
     }
 
