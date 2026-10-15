@@ -4,7 +4,7 @@
 
 ## 1. Titolare del Trattamento
 
-BolloFacile ("l'App") è sviluppata da Mohammadamin Albooyeh. Contatto: mohammadaminalbooyeh@gmail.com
+BolloFacile ("l'App") è sviluppata da Mohammadamin Albooyeh. Contatto: amin.albooyeh@gmail.com
 
 ## 2. Dati Raccolti
 
@@ -64,7 +64,7 @@ Eventuali modifiche saranno notificate in-app e su questa pagina.
 
 ## 10. Contatto
 
-Per esercitare i diritti o domande: mohammadaminalbooyeh@gmail.com
+Per esercitare i diritti o domande: amin.albooyeh@gmail.com
 
 ---
 
