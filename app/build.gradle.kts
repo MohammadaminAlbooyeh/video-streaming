@@ -8,13 +8,13 @@ plugins {
 
 android {
     namespace = "it.bollofacile"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "it.bollofacile"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 3
+        targetSdk = 36
+        versionCode = 4
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
