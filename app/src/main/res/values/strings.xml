@@ -4,7 +4,7 @@
     <!-- AdMob (replace with your own IDs) -->
     <string name="admob_app_id">ca-app-pub-5675602161374523~4367229142</string>
     <string name="admob_banner_id">ca-app-pub-5675602161374523/2667134664</string>
-    <string name="admob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="admob_interstitial_id">ca-app-pub-5675602161374523/6358825446</string>
     
     <!-- Home -->
     <string name="home_title">I tuoi veicoli</string>
