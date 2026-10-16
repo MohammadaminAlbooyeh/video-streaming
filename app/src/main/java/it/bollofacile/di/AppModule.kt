@@ -73,7 +73,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAdManager(@dagger.hilt.android.qualifiers.ApplicationContext context: Context): AdManager {
-        return AdManager(context)
+    fun provideAdManager(
+        @dagger.hilt.android.qualifiers.ApplicationContext context: Context,
+        settingsStore: SettingsStore
+    ): AdManager {
+        return AdManager(context, settingsStore)
     }
 }

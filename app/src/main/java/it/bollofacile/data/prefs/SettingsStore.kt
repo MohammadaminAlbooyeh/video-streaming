@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,9 @@ class SettingsStore @Inject constructor(
     private val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
     private val KEY_AD_CONSENT = booleanPreferencesKey("ad_consent")
     private val KEY_FIRST_LAUNCH = booleanPreferencesKey("first_launch")
+    private val KEY_AD_SESSION_COUNT = intPreferencesKey("ad_session_count")
+    private val KEY_AD_LAST_INTERSTITIAL_AT = longPreferencesKey("ad_last_interstitial_at")
+    private val KEY_AD_ACTION_COUNTER = intPreferencesKey("ad_action_counter")
 
     companion object {
         const val DEFAULT_REMINDER_DAYS = "30,15,7,1"
@@ -76,6 +80,38 @@ class SettingsStore @Inject constructor(
 
     suspend fun setFirstLaunchComplete() {
         context.dataStore.edit { it[KEY_FIRST_LAUNCH] = false }
+    }
+
+    suspend fun incrementAdSessionCount(): Int {
+        var count = 0
+        context.dataStore.edit {
+            count = (it[KEY_AD_SESSION_COUNT] ?: 0) + 1
+            it[KEY_AD_SESSION_COUNT] = count
+        }
+        return count
+    }
+
+    suspend fun getAdSessionCount(): Int =
+        context.dataStore.data.map { it[KEY_AD_SESSION_COUNT] ?: 0 }.first()
+
+    suspend fun getLastInterstitialAt(): Long =
+        context.dataStore.data.map { it[KEY_AD_LAST_INTERSTITIAL_AT] ?: 0L }.first()
+
+    suspend fun setLastInterstitialAt(timestamp: Long) {
+        context.dataStore.edit { it[KEY_AD_LAST_INTERSTITIAL_AT] = timestamp }
+    }
+
+    suspend fun incrementAdActionCounter(): Int {
+        var count = 0
+        context.dataStore.edit {
+            count = (it[KEY_AD_ACTION_COUNTER] ?: 0) + 1
+            it[KEY_AD_ACTION_COUNTER] = count
+        }
+        return count
+    }
+
+    suspend fun resetAdActionCounter() {
+        context.dataStore.edit { it[KEY_AD_ACTION_COUNTER] = 0 }
     }
 
     suspend fun getRegioneDefaultSync(): String = regioneDefault.first()

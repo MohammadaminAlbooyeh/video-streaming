@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import it.bollofacile.ads.AdManager
 import it.bollofacile.data.prefs.SettingsStore
 import it.bollofacile.ui.navigation.AppNavHost
 import it.bollofacile.ui.theme.Theme
@@ -25,8 +26,14 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var settingsStore: SettingsStore
 
+    @Inject
+    lateinit var adManager: AdManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            adManager.onSessionStart()
+        }
         // Default to Italian until the user picks a language explicitly
         if (AppCompatDelegate.getApplicationLocales().isEmpty) {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("it"))
@@ -46,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    AppNavHost(navController)
+                    AppNavHost(navController, adManager = adManager)
                 }
             }
         }

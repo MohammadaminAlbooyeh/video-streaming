@@ -1,7 +1,10 @@
 package it.bollofacile.ui.navigation
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import it.bollofacile.ads.AdManager
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,7 +22,21 @@ import it.bollofacile.ui.veicolo.VeicoloFormScreen
 import it.bollofacile.ui.veicolo.VeicoloViewModel
 
 @Composable
-fun AppNavHost(navController: NavHostController, startDestination: String = "home") {
+fun AppNavHost(
+    navController: NavHostController,
+    startDestination: String = "home",
+    adManager: AdManager? = null
+) {
+    val activity = LocalContext.current as? Activity
+
+    fun completeAction(navigateBack: () -> Unit) {
+        if (adManager != null && activity != null) {
+            adManager.onActionCompleted(activity) { navigateBack() }
+        } else {
+            navigateBack()
+        }
+    }
+
     NavHost(navController, startDestination) {
         composable("home") {
             HomeScreen(
@@ -48,7 +65,7 @@ fun AppNavHost(navController: NavHostController, startDestination: String = "hom
             VeicoloFormScreen(
                 viewModel = hiltViewModel<VeicoloViewModel>(),
                 veiculoId = null,
-                onSave = { navController.popBackStack() },
+                onSave = { completeAction { navController.popBackStack() } },
                 onCancel = { navController.popBackStack() }
             )
         }
@@ -74,14 +91,14 @@ fun AppNavHost(navController: NavHostController, startDestination: String = "hom
             VeicoloFormScreen(
                 viewModel = hiltViewModel<VeicoloViewModel>(),
                 veiculoId = veicoloId,
-                onSave = { navController.popBackStack() },
+                onSave = { completeAction { navController.popBackStack() } },
                 onCancel = { navController.popBackStack() }
             )
         }
         composable("bollo/calc") {
             BolloCalcScreen(
                 viewModel = hiltViewModel<BolloViewModel>(),
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { completeAction { navController.popBackStack() } }
             )
         }
         composable("revisione") {
