@@ -57,6 +57,7 @@
     <!-- Bollo Calc -->
     <string name="quick_calc">Calcolo rapido</string>
     <string name="calculate">Calcola</string>
+    <string name="calculation_disclaimer">Questo calcolo non ha valore legale o ufficiale: è fornito a titolo indicativo e, nella maggior parte dei casi, corrisponde al valore corretto. Verifica sempre gli importi con fonti ufficiali (ACI, Agenzia delle Entrate o la tua Regione).</string>
     <string name="result">Risultato</string>
     <string name="due_date">Scadenza</string>
     <string name="preview_calc">Anteprima calcolo</string>

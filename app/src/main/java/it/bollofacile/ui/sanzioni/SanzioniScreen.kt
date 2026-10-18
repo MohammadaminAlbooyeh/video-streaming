@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import it.bollofacile.R
 import it.bollofacile.domain.CalcolaSanzioneUseCase
+import it.bollofacile.ui.components.CalculationDisclaimer
 import it.bollofacile.ui.components.DatePickerField
 import it.bollofacile.ui.components.Panel
 import it.bollofacile.util.Format
@@ -102,6 +103,8 @@ fun SanzioniScreen(
                     )
                 }
             }
+
+            CalculationDisclaimer()
 
             Button(
                 onClick = {

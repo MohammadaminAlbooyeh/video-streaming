@@ -57,6 +57,7 @@
     <!-- Bollo Calc -->
     <string name="quick_calc">Quick calc</string>
     <string name="calculate">Calculate</string>
+    <string name="calculation_disclaimer">This calculation has no legal or official value: it is provided for informational purposes and, in most cases, matches the correct amount. Always verify amounts with official sources (ACI, Agenzia delle Entrate or your Region).</string>
     <string name="result">Result</string>
     <string name="due_date">Due date</string>
     <string name="preview_calc">Calculation preview</string>

@@ -44,6 +44,7 @@ import it.bollofacile.rules.model.ClasseEuro
 import it.bollofacile.rules.model.Regione
 import it.bollofacile.rules.model.RevisioneResult
 import it.bollofacile.rules.model.Veicolo
+import it.bollofacile.ui.components.CalculationDisclaimer
 import it.bollofacile.ui.components.DatePickerField
 import it.bollofacile.ui.components.DropdownField
 import it.bollofacile.ui.components.Panel
@@ -141,6 +142,8 @@ fun BolloCalcScreen(
                     VehicleFormFields(formB)
                 }
             }
+
+            CalculationDisclaimer()
 
             Button(
                 onClick = {

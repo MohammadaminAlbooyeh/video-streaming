@@ -37,6 +37,7 @@ import it.bollofacile.rules.model.Alimentazione
 import it.bollofacile.rules.model.ClasseEuro
 import it.bollofacile.rules.model.Regione
 import it.bollofacile.rules.model.Veicolo
+import it.bollofacile.ui.components.CalculationDisclaimer
 import it.bollofacile.ui.components.DatePickerField
 import it.bollofacile.ui.components.DropdownField
 import it.bollofacile.ui.components.Panel
@@ -149,6 +150,8 @@ fun RevisioneScreen(
                     )
                 }
             }
+
+            CalculationDisclaimer()
 
             Button(
                 onClick = {
