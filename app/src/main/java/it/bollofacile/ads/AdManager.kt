@@ -41,13 +41,27 @@ class AdManager(
     private var shownThisSession = false
     private var sessionCount = 0
 
+    /**
+     * Whether the user's GDPR/UMP consent decision allows ad requests. False until
+     * [setAdsAllowed] is called with the real consent outcome (see MainActivity);
+     * no ad is ever requested while this is false.
+     */
+    private var adsAllowed = false
+
+    fun setAdsAllowed(allowed: Boolean) {
+        adsAllowed = allowed
+        if (allowed && sessionCount > GRACE_SESSIONS) {
+            preloadInterstitial()
+        }
+    }
+
     /** Call once per app process start (e.g. from MainActivity.onCreate). */
     fun onSessionStart() {
         shownThisSession = false
         scope.launch {
             sessionCount = settingsStore.incrementAdSessionCount()
             // Only pay for an ad load when this session could actually show one.
-            if (sessionCount > GRACE_SESSIONS) {
+            if (adsAllowed && sessionCount > GRACE_SESSIONS) {
                 preloadInterstitial()
             }
         }
@@ -62,7 +76,8 @@ class AdManager(
         scope.launch {
             val actions = settingsStore.incrementAdActionCounter()
 
-            val eligible = sessionCount > GRACE_SESSIONS &&
+            val eligible = adsAllowed &&
+                sessionCount > GRACE_SESSIONS &&
                 !shownThisSession &&
                 actions >= ACTIONS_PER_AD &&
                 System.currentTimeMillis() - settingsStore.getLastInterstitialAt() >= MIN_INTERVAL_MS
@@ -95,7 +110,7 @@ class AdManager(
     }
 
     private fun preloadInterstitial() {
-        if (isLoading || interstitialAd != null) return
+        if (!adsAllowed || isLoading || interstitialAd != null) return
         isLoading = true
         InterstitialAd.load(
             context,

@@ -84,8 +84,7 @@ support@tuo-dominio.com
 3. Revisione: calcolo scadenza
 4. Sanzioni: ravvedimento operoso
 5. Impostazioni: tema, regione, promemoria
-6. Pro: funzionalità sbloccate
-7. Tablet layout (7" e 10")
+6. Tablet layout (7" e 10")
 
 ## Video promo (opzionale)
 30 secondi, landscape, mostra flusso principale
@@ -93,6 +92,6 @@ support@tuo-dominio.com
 ## Note per la pubblicazione
 - Target SDK 35, Min SDK 24
 - Permessi: POST_NOTIFICATIONS, SCHEDULE_EXACT_ALARM
-- Billing: managed product "pro_lifetime"
-- Ads: AdMob banner + interstitial (solo free)
+- App gratuita, nessun acquisto in-app
+- Ads: AdMob banner + interstitial
 - UMP: Consent form all'avvio (EEA/UK/US state laws)

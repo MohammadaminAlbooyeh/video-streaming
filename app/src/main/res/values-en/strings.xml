@@ -93,6 +93,9 @@
     <string name="reminder_days">Days before due date</string>
     <string name="version">Version</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_section">Privacy</string>
+    <string name="ad_consent_desc">Manage your consent for personalized ad data collection (GDPR/UMP).</string>
+    <string name="manage_ad_consent">Manage ad consent</string>
     <string name="open_source_licenses">Open Source Licenses</string>
     
     <!-- Pro -->

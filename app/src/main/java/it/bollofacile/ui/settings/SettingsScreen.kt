@@ -172,6 +172,24 @@ fun SettingsScreen(
                 }
             }
 
+            // Privacy / ad consent
+            Panel(title = stringResource(R.string.privacy_section)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = stringResource(R.string.ad_consent_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    OutlinedButton(
+                        onClick = { activity?.let { viewModel.manageAdConsent(it) } },
+                        enabled = activity != null,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = stringResource(R.string.manage_ad_consent))
+                    }
+                }
+            }
+
             // About
             Panel(title = stringResource(R.string.about)) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -221,12 +239,26 @@ private fun ThemeOption(modifier: Modifier = Modifier, text: String, selected: B
 class SettingsViewModel @Inject constructor(
     val settingsStore: SettingsStore,
     private val veicoloRepository: it.bollofacile.data.repository.VeicoloRepository,
-    private val database: it.bollofacile.data.db.AppDatabase
+    private val database: it.bollofacile.data.db.AppDatabase,
+    private val consentManager: it.bollofacile.ads.ConsentManager,
+    private val adManager: it.bollofacile.ads.AdManager
 ) : ViewModel() {
     fun setTheme(theme: Int) = viewModelScope.launch { settingsStore.setTheme(theme) }
     fun setRegioneDefault(codice: String) = viewModelScope.launch { settingsStore.setRegioneDefault(codice) }
     fun setNotificationsEnabled(enabled: Boolean) = viewModelScope.launch { settingsStore.setNotificationsEnabled(enabled) }
     fun setReminderDays(days: List<Int>) = viewModelScope.launch { settingsStore.setReminderDays(days) }
+
+    /**
+     * Resets the stored GDPR/UMP consent decision and immediately re-shows the consent form.
+     * Updates interstitial-ad gating right away; banner ads already on screen may need an
+     * app restart to reflect a changed decision.
+     */
+    fun manageAdConsent(activity: android.app.Activity) {
+        consentManager.resetConsent()
+        consentManager.requestConsentAndShowFormIfRequired(activity) { canRequestAds ->
+            adManager.setAdsAllowed(canRequestAds)
+        }
+    }
 
     fun exportCsv(activity: android.app.Activity) = viewModelScope.launch {
         val veicoli = veicoloRepository.getAll().first()

@@ -11,48 +11,42 @@ BolloFacile ("l'App") è sviluppata da Mohammadamin Albooyeh. Contatto: amin.alb
 ### 2.1 Dati inseriti dall'utente
 - Dati veicolo: targa (opzionale), marca, modello, kW/CV, classe Euro, alimentazione, data immatricolazione, regione
 - Pagamenti: importo, data, tipo (bollo/revisione/altro), note
-- Preferenze: regione di default, giorni preavviso, tema, stato Pro
+- Preferenze: regione di default, giorni preavviso, tema
 
 ### 2.2 Dati tecnici (automatici)
-- Identificatori pubblicitari (Google Advertising ID) per annunci personalizzati
-- Dati di crash/analytics anonimi (Firebase Crashlytics se abilitato)
-- Log di acquisto in-app (token ordine, SKU, timestamp) per verifica abbonamenti
+- Identificatore pubblicitario (Google Advertising ID), usato dall'SDK Google Mobile Ads per annunci personalizzati, solo dopo il consenso dell'utente tramite il modulo UMP
 
 ## 3. Finalità e Base Giuridica
 
 | Finalità | Base Giuridica |
 |----------|----------------|
 | Calcolo bollo/revisione/sanzioni | Esecuzione contratto (servizio richiesto) |
-| Salvataggio veicoli e storico | Consenso (facoltativo, Pro) |
+| Salvataggio veicoli e storico | Consenso (facoltativo) |
 | Promemoria scadenze | Consenso (facoltativo) |
 | Annunci personalizzati (AdMob) | Consenso (tramite UMP/GDPR) |
-| Verifica acquisti in-app | Esecuzione contratto |
 | Prevenzione frodi/abusi | Interesse legittimo |
 
 ## 4. Condivisione Dati
 
-- **Google Play Billing**: Token acquisto per verifica abbonamenti
-- **AdMob/UMP**: ID pubblicitario e consenso per annunci (solo se utente accetta)
+- **AdMob/UMP**: ID pubblicitario e consenso per annunci (solo dopo che l'utente ha completato il modulo di consenso UMP)
 - **Nessun server proprietario**: Tutti i dati restano sul dispositivo
 
 ## 5. Conservazione
 
 - Dati veicolo/pagamenti: Fino a eliminazione manuale o disinstallazione
 - Consenso annunci: 13 mesi (standard UMP)
-- Log acquisti: 3 anni (requisiti fiscali Google Play)
 
 ## 6. Diritti dell'Utente (GDPR Art. 15-22)
 
 - Accesso, rettifica, cancellazione dei dati
 - Limitazione/opposizione al trattamento
-- Portabilità dati (export JSON/CSV da app Pro)
-- Revoca consenso in qualsiasi momento (Impostazioni → Privacy)
+- Portabilità dati (export CSV, da Impostazioni)
+- Revoca/modifica del consenso agli annunci in qualsiasi momento (Impostazioni → Privacy → Gestisci consenso annunci)
 
 ## 7. Sicurezza
 
-- Database Room criptato (SQLCipher opzionale)
-- Nessuna trasmissione dati su rete (eccetto AdMob/Billing)
-- Chiavi Android Keystore per dati sensibili
+- Database locale (Room/SQLite) sul dispositivo, non sincronizzato su alcun server
+- Nessuna trasmissione dati su rete (eccetto AdMob)
 
 ## 8. Minori
 
