@@ -1,0 +1,8 @@
+# Thumbnail service dependencies
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+confluent-kafka==2.5.3
+boto3==1.35.36
+opencv-python-headless==4.10.0.84
+pydantic==2.9.2
+pydantic-settings==2.5.2

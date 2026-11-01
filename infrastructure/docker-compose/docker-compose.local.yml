@@ -1,0 +1,217 @@
+version: "3.9"
+
+name: video-streaming-platform
+
+services:
+  # ------- Infrastructure -------
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: vsp
+      POSTGRES_PASSWORD: vsp
+      POSTGRES_DB: vsp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vsp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+
+  minio:
+    image: minio/minio:RELEASE.2024-09-13T20-26-02Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+
+  # ------- Java services -------
+
+  user-service:
+    build: ../../services/user-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vsp
+      SPRING_DATASOURCE_USERNAME: vsp
+      SPRING_DATASOURCE_PASSWORD: vsp
+      JWT_SECRET: change-me-in-production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+
+  video-service:
+    build: ../../services/video-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vsp
+      SPRING_DATASOURCE_USERNAME: vsp
+      SPRING_DATASOURCE_PASSWORD: vsp
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    ports:
+      - "8082:8082"
+
+  streaming-service:
+    build: ../../services/streaming-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vsp
+      SPRING_DATASOURCE_USERNAME: vsp
+      SPRING_DATASOURCE_PASSWORD: vsp
+      SPRING_DATA_REDIS_HOST: redis
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      CDN_SIGNING_SECRET: change-me
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+
+  engagement-service:
+    build: ../../services/engagement-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vsp
+      SPRING_DATASOURCE_USERNAME: vsp
+      SPRING_DATASOURCE_PASSWORD: vsp
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8084:8084"
+
+  # ------- Python services -------
+
+  transcoding-worker:
+    build: ../../services/transcoding-worker
+    depends_on:
+      - kafka
+      - minio
+    environment:
+      OBJECT_STORAGE_ENDPOINT: http://minio:9000
+      OBJECT_STORAGE_ACCESS_KEY: minioadmin
+      OBJECT_STORAGE_SECRET_KEY: minioadmin
+    ports:
+      - "8091:8091"
+
+  thumbnail-service:
+    build: ../../services/thumbnail-service
+    depends_on:
+      - kafka
+      - minio
+    environment:
+      OBJECT_STORAGE_ENDPOINT: http://minio:9000
+      OBJECT_STORAGE_ACCESS_KEY: minioadmin
+      OBJECT_STORAGE_SECRET_KEY: minioadmin
+    ports:
+      - "8092:8092"
+
+  moderation-service:
+    build: ../../services/moderation-service
+    depends_on:
+      - kafka
+      - minio
+    environment:
+      OBJECT_STORAGE_ENDPOINT: http://minio:9000
+      OBJECT_STORAGE_ACCESS_KEY: minioadmin
+      OBJECT_STORAGE_SECRET_KEY: minioadmin
+    ports:
+      - "8093:8093"
+
+  search-service:
+    build: ../../services/search-service
+    depends_on:
+      elasticsearch:
+        condition: service_started
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    ports:
+      - "8094:8094"
+
+  recommendation-service:
+    build: ../../services/recommendation-service
+    depends_on:
+      - kafka
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8095:8095"
+
+  analytics-service:
+    build: ../../services/analytics-service
+    depends_on:
+      - kafka
+    ports:
+      - "8096:8096"
+
+  notification-service:
+    build: ../../services/notification-service
+    depends_on:
+      - kafka
+    environment:
+      PUSH_GATEWAY_URL: http://push-gateway:8080/send
+      EMAIL_PROVIDER_URL: http://email-provider:8080/send
+    ports:
+      - "8097:8097"
+
+volumes:
+  postgres-data:
+  es-data:
+  minio-data:
